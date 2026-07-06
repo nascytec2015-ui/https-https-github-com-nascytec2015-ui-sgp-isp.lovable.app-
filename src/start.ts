@@ -2,12 +2,17 @@ import { createStart, createMiddleware } from "@tanstack/react-start";
 
 import { renderErrorPage } from "./lib/error-page";
 import { attachSupabaseAuth } from "@/integrations/supabase/auth-attacher";
-import { initializeSync } from "./server/sync-routes";
 
-// Inicializar sincronização bidirecional
-initializeSync().catch((err) => {
-  console.error("[SYNC] Erro ao inicializar sincronização:", err);
-  // Não impedir o app de rodar se a sincronização falhar
+// Middleware para inicializar sincronização no servidor
+const syncMiddleware = createMiddleware().server(async ({ next }) => {
+  // Importar apenas no servidor
+  try {
+    const { initializeSync } = await import("./server/sync-routes");
+    await initializeSync();
+  } catch (err) {
+    console.error("[SYNC] Erro ao inicializar sincronização:", err);
+  }
+  return next();
 });
 
 const errorMiddleware = createMiddleware().server(async ({ next }) => {
@@ -27,5 +32,5 @@ const errorMiddleware = createMiddleware().server(async ({ next }) => {
 
 export const startInstance = createStart(() => ({
   functionMiddleware: [attachSupabaseAuth],
-  requestMiddleware: [errorMiddleware],
+  requestMiddleware: [syncMiddleware, errorMiddleware],
 }));
