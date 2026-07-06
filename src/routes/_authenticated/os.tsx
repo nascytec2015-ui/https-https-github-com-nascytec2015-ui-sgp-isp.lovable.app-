@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import { toast } from "sonner";
 import { Plus, Pencil, Trash2, ClipboardList, Search } from "lucide-react";
 import { z } from "zod";
@@ -35,6 +35,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useClienteData } from "@/hooks/use-cliente-data";
 
 export const Route = createFileRoute("/_authenticated/os")({
   head: () => ({ meta: [{ title: "Ordens de Serviço — ISP Manager" }] }),
@@ -132,6 +133,43 @@ function OSPage() {
   const [materiais, setMateriais] = useState<Material[]>([]);
   const [filter, setFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState<OSStatus | "todos">("todos");
+  const [selectedClientId, setSelectedClientId] = useState("");
+  const [enderecoPreenchido, setEnderecoPreenchido] = useState("");
+  const enderecoInputRef = useRef<HTMLInputElement>(null);
+
+  const { data: clienteData } = useQuery({
+    queryKey: ['cliente-completo', selectedClientId],
+    enabled: !!selectedClientId,
+    queryFn: async () => {
+      if (!selectedClientId) return null;
+      const { data, error } = await supabase
+        .from('clientes')
+        .select('endereco, numero, bairro, cidade, estado, cep')
+        .eq('id', selectedClientId)
+        .single();
+      if (error) throw error;
+      return data;
+    }
+  });
+
+  // Quando cliente muda, preencher endereço automaticamente
+  useEffect(() => {
+    if (clienteData) {
+      const partes = [
+        clienteData.endereco,
+        clienteData.numero,
+        clienteData.bairro,
+        clienteData.cidade,
+        clienteData.estado,
+        clienteData.cep
+      ].filter(Boolean);
+      const enderecoFormatado = partes.join(', ');
+      setEnderecoPreenchido(enderecoFormatado);
+      if (enderecoInputRef.current) {
+        enderecoInputRef.current.value = enderecoFormatado;
+      }
+    }
+  }, [clienteData]);
 
   const { data: ordens = [], isLoading } = useQuery({
     queryKey: ["ordens_servico"],
@@ -185,12 +223,16 @@ function OSPage() {
   function openNew() {
     setEditing(null);
     setMateriais([]);
+    setSelectedClientId("");
+    setEnderecoPreenchido("");
     setOpen(true);
   }
 
   function openEdit(o: OS) {
     setEditing(o);
     setMateriais([]);
+    setSelectedClientId(o.cliente_id);
+    setEnderecoPreenchido(o.endereco_atendimento || "");
     setOpen(true);
   }
 
@@ -403,6 +445,8 @@ function OSPage() {
           if (!o) {
             setEditing(null);
             setMateriais([]);
+            setSelectedClientId("");
+            setEnderecoPreenchido("");
           }
         }}
       >
@@ -425,7 +469,8 @@ function OSPage() {
                 <select
                   id="cliente_id"
                   name="cliente_id"
-                  defaultValue={editing?.cliente_id ?? ""}
+                  value={selectedClientId}
+                  onChange={(e) => setSelectedClientId(e.target.value)}
                   required
                   className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm"
                 >
@@ -501,11 +546,17 @@ function OSPage() {
             <div className="space-y-2">
               <Label htmlFor="endereco_atendimento">Endereço de atendimento</Label>
               <Input
+                ref={enderecoInputRef}
                 id="endereco_atendimento"
                 name="endereco_atendimento"
                 defaultValue={editing?.endereco_atendimento ?? ""}
                 placeholder="Deixe em branco para usar o do cliente"
               />
+              {enderecoPreenchido && (
+                <p className="text-xs text-muted-foreground">
+                  📍 Preenchido automaticamente: {enderecoPreenchido}
+                </p>
+              )}
             </div>
 
             <div className="grid grid-cols-2 gap-3">
