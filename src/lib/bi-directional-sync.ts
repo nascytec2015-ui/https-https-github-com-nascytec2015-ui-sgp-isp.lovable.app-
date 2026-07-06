@@ -36,6 +36,7 @@ class BiDirectionalSync {
         'clientes',
         'ordens_servico',
         'os_materiais',
+        'os_evidencias',
         'projetos_ftth'
     ];
 

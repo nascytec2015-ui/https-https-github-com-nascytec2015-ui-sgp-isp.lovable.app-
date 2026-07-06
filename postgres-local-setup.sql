@@ -52,6 +52,7 @@ VALUES
   ('clientes', now(), 0, 0),
   ('ordens_servico', now(), 0, 0),
   ('os_materiais', now(), 0, 0),
+  ('os_evidencias', now(), 0, 0),
   ('projetos_ftth', now(), 0, 0)
 ON CONFLICT (tabela) DO NOTHING;
 
