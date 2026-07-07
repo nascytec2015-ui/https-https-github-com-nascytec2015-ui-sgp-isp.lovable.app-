@@ -48,14 +48,3 @@ WITH CHECK (EXISTS (
     )
 ));
 
-CREATE POLICY "Deletar evidências OS" ON public.os_evidencias
-FOR DELETE TO authenticated
-USING (EXISTS (
-  SELECT 1 FROM public.ordens_servico o
-  WHERE o.id = os_evidencias.os_id
-    AND (
-      public.has_role(auth.uid(), 'admin')
-      OR public.has_role(auth.uid(), 'atendente')
-      OR (public.has_role(auth.uid(), 'tecnico') AND o.tecnico_id = auth.uid())
-    )
-));
