@@ -1,7 +1,3 @@
--- Enum types for OS
-CREATE TYPE public.os_tipo AS ENUM ('instalacao', 'manutencao', 'mudanca_endereco', 'visita_tecnica');
-CREATE TYPE public.os_status AS ENUM ('aberta', 'agendada', 'em_andamento', 'concluida', 'cancelada');
-
 -- Main OS table
 CREATE TABLE public.ordens_servico (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

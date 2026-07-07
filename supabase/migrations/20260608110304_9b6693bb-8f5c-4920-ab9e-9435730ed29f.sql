@@ -1,8 +1,3 @@
-
--- ============ ENUM ============
-CREATE TYPE public.app_role AS ENUM ('admin', 'tecnico', 'atendente');
-CREATE TYPE public.cliente_status AS ENUM ('ativo', 'bloqueado', 'cancelado');
-
 -- ============ PROFILES ============
 CREATE TABLE public.profiles (
   id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
