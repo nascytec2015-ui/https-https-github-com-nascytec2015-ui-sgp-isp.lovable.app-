@@ -24,7 +24,7 @@ GRANT ALL ON public.user_roles TO service_role;
 ALTER TABLE public.user_roles ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Public view roles" ON public.user_roles FOR SELECT TO public USING (true);
 
--- Versão 1: Dois parâmetros (Corrigida)
+-- Versão 1: Dois parâmetros
 CREATE OR REPLACE FUNCTION public.has_any_role(_user_id uuid, _role text)
 RETURNS boolean 
 LANGUAGE plpgsql
@@ -39,7 +39,7 @@ BEGIN
 END;
 $$;
 
--- Versão 2: Um parâmetro (CORRIGIDA SINTAXE)
+-- Versão 2: Um parâmetro
 CREATE OR REPLACE FUNCTION public.has_any_role(_user_id UUID)
 RETURNS BOOLEAN 
 LANGUAGE sql 
@@ -49,7 +49,7 @@ SET search_path = public AS $$
   SELECT EXISTS (SELECT 1 FROM public.user_roles WHERE user_id = _user_id);
 $$;
 
--- Função auxiliar has_role para evitar falhas de dependência
+-- Função auxiliar has_role
 CREATE OR REPLACE FUNCTION public.has_role(_user_id uuid, _role text)
 RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER AS $$
   SELECT EXISTS (SELECT 1 FROM public.user_roles WHERE user_id = _user_id AND role = _role);
@@ -78,7 +78,6 @@ BEGIN
 END;
 $$;
 
--- Remove se já existir para não dar erro
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 CREATE TRIGGER on_auth_user_created
 AFTER INSERT ON auth.users
@@ -106,7 +105,6 @@ CREATE TABLE IF NOT EXISTS public.planos (
 GRANT ALL ON public.planos TO authenticated, anon, service_role;
 ALTER TABLE public.planos ENABLE ROW LEVEL SECURITY;
 
--- Libera as políticas para aceitar requisições de desenvolvimento (anon e authenticated)
 CREATE POLICY "Allow public read planos" ON public.planos FOR SELECT TO public USING (true);
 CREATE POLICY "Allow public write planos" ON public.planos FOR INSERT TO public WITH CHECK (true);
 CREATE POLICY "Allow public update planos" ON public.planos FOR UPDATE TO public USING (true);
@@ -141,7 +139,8 @@ CREATE TABLE IF NOT EXISTS public.clientes (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE ALL ON public.clientes TO authenticated, anon, service_role;
+-- LINHA CORRIGIDA DE CREATE PARA GRANT:
+GRANT ALL ON public.clientes TO authenticated, anon, service_role;
 ALTER TABLE public.clientes ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Allow public read clientes" ON public.clientes FOR SELECT TO public USING (true);
 CREATE POLICY "Allow public create clientes" ON public.clientes FOR INSERT TO public WITH CHECK (true);
