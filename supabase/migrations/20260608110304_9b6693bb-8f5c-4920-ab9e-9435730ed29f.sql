@@ -1,3 +1,21 @@
+-- ============ CRIAÇÃO DOS TIPOS (ENUMS) ============
+-- Cria o tipo de cargos se não existir
+DO $$ 
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'app_role') THEN
+        CREATE TYPE public.app_role AS ENUM ('admin', 'tecnico', 'comercial', 'atendente');
+    END IF;
+END $$;
+
+-- Cria o tipo de status do cliente se não existir
+DO $$ 
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'cliente_status') THEN
+        CREATE TYPE public.cliente_status AS ENUM ('ativo', 'inativo', 'bloqueado');
+    END IF;
+END $$;
+
+-- ============ PROFILES ============
 CREATE TABLE IF NOT EXISTS public.profiles (
   id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   full_name TEXT,
@@ -34,7 +52,7 @@ BEGIN
     RETURN EXISTS (
         SELECT 1 
         FROM public.user_roles 
-        WHERE user_id = _user_id AND role = _role
+        WHERE user_id = _user_id AND role::text = _role
     );
 END;
 $$;
@@ -52,7 +70,7 @@ $$;
 -- Função auxiliar has_role
 CREATE OR REPLACE FUNCTION public.has_role(_user_id uuid, _role text)
 RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER AS $$
-  SELECT EXISTS (SELECT 1 FROM public.user_roles WHERE user_id = _user_id AND role = _role);
+  SELECT EXISTS (SELECT 1 FROM public.user_roles WHERE user_id = _user_id AND role::text = _role);
 $$;
 
 GRANT EXECUTE ON FUNCTION public.has_any_role(uuid, text) TO anon, authenticated, public;
@@ -70,9 +88,9 @@ BEGIN
 
   SELECT COUNT(*) INTO user_count FROM auth.users;
   IF user_count = 1 THEN
-    INSERT INTO public.user_roles (user_id, role) VALUES (NEW.id, 'admin');
+    INSERT INTO public.user_roles (user_id, role) VALUES (NEW.id, 'admin'::public.app_role);
   ELSE
-    INSERT INTO public.user_roles (user_id, role) VALUES (NEW.id, 'atendente');
+    INSERT INTO public.user_roles (user_id, role) VALUES (NEW.id, 'atendente'::public.app_role);
   END IF;
   RETURN NEW;
 END;
@@ -131,7 +149,7 @@ CREATE TABLE IF NOT EXISTS public.clientes (
   ppoe_pass TEXT,
   ip_fixo TEXT,
   observacoes TEXT,
-  status public.cliente_status NOT NULL DEFAULT 'ativo',
+  status public.cliente_status NOT NULL DEFAULT 'ativo'::public.cliente_status,
   data_ativacao DATE DEFAULT CURRENT_DATE,
   data_cancelamento DATE,
   created_by UUID REFERENCES auth.users(id) ON DELETE SET NULL,
@@ -139,7 +157,6 @@ CREATE TABLE IF NOT EXISTS public.clientes (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
--- LINHA CORRIGIDA DE CREATE PARA GRANT:
 GRANT ALL ON public.clientes TO authenticated, anon, service_role;
 ALTER TABLE public.clientes ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Allow public read clientes" ON public.clientes FOR SELECT TO public USING (true);
