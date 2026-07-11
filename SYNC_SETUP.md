@@ -57,7 +57,7 @@ POSTGRES_PASSWORD="R23f80N19"
 POSTGRES_DB="sgp_isp"
 
 # Sincronização
-SYNC_INTERVAL="30000"          # 30 segundos
+SYNC_INTERVAL="60000"          # 60 segundos
 SYNC_PRIORITY="supabase"       # Prioridade em conflitos
 ```
 
