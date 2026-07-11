@@ -160,7 +160,7 @@ USING (bucket_id = 'os_evidencias');
 ## 🔄 Sincronização com PostgreSQL
 
 A tabela `os_evidencias` é sincronizada automaticamente:
-- ✅ A cada 30 segundos com PostgreSQL local
+- ✅ A cada 60 segundos com PostgreSQL local
 - ✅ Registra em `sync_logs`
 - ✅ Detecta conflitos em `sync_conflicts`
 
