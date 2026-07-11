@@ -18,6 +18,7 @@ import { Route as AuthenticatedMonitoramentoRouteImport } from './routes/_authen
 import { Route as AuthenticatedFtthRouteImport } from './routes/_authenticated/ftth'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedClientesRouteImport } from './routes/_authenticated/clientes'
+import { Route as ApiSyncHealthRouteImport } from './routes/api/sync/health'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -64,6 +65,11 @@ const AuthenticatedClientesRoute = AuthenticatedClientesRouteImport.update({
   path: '/clientes',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ApiSyncHealthRoute = ApiSyncHealthRouteImport.update({
+  id: '/api/sync/health',
+  path: '/api/sync/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -74,6 +80,7 @@ export interface FileRoutesByFullPath {
   '/monitoramento': typeof AuthenticatedMonitoramentoRoute
   '/os': typeof AuthenticatedOsRoute
   '/planos': typeof AuthenticatedPlanosRoute
+  '/api/sync/health': typeof ApiSyncHealthRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -84,6 +91,7 @@ export interface FileRoutesByTo {
   '/monitoramento': typeof AuthenticatedMonitoramentoRoute
   '/os': typeof AuthenticatedOsRoute
   '/planos': typeof AuthenticatedPlanosRoute
+  '/api/sync/health': typeof ApiSyncHealthRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -96,6 +104,7 @@ export interface FileRoutesById {
   '/_authenticated/monitoramento': typeof AuthenticatedMonitoramentoRoute
   '/_authenticated/os': typeof AuthenticatedOsRoute
   '/_authenticated/planos': typeof AuthenticatedPlanosRoute
+  '/api/sync/health': typeof ApiSyncHealthRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -108,6 +117,7 @@ export interface FileRouteTypes {
     | '/monitoramento'
     | '/os'
     | '/planos'
+    | '/api/sync/health'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -118,6 +128,7 @@ export interface FileRouteTypes {
     | '/monitoramento'
     | '/os'
     | '/planos'
+    | '/api/sync/health'
   id:
     | '__root__'
     | '/'
@@ -129,12 +140,14 @@ export interface FileRouteTypes {
     | '/_authenticated/monitoramento'
     | '/_authenticated/os'
     | '/_authenticated/planos'
+    | '/api/sync/health'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  ApiSyncHealthRoute: typeof ApiSyncHealthRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -202,6 +215,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedClientesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/sync/health': {
+      id: '/api/sync/health'
+      path: '/api/sync/health'
+      fullPath: '/api/sync/health'
+      preLoaderRoute: typeof ApiSyncHealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -230,6 +250,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  ApiSyncHealthRoute: ApiSyncHealthRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
