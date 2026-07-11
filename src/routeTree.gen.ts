@@ -18,7 +18,7 @@ import { Route as AuthenticatedMonitoramentoRouteImport } from './routes/_authen
 import { Route as AuthenticatedFtthRouteImport } from './routes/_authenticated/ftth'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedClientesRouteImport } from './routes/_authenticated/clientes'
-import { Route as ApiSyncHealthRouteImport } from './routes/api/sync/health'
+import { Route as ApiSyncHealthRouteImport } from './routes/api/sync/health.server'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
