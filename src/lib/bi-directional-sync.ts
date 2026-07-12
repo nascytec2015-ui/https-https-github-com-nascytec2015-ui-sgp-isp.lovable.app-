@@ -537,7 +537,7 @@ class BiDirectionalSync {
                 const { error } =
                     await this.supabase
                         .from(tableName)
-                        .insert([record]);
+                        .insert([record as any]);
 
 
 
