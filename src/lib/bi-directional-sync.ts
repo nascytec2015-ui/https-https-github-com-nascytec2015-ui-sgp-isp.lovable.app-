@@ -36,9 +36,7 @@ interface SyncConfig {
     syncInterval: number;
 
 
-    /**
-     * Quem vence em caso de empate
-     */
+    /*** Quem vence em caso de empate ***/
     syncPriority: 'supabase' | 'local';
 
 }
@@ -56,7 +54,7 @@ class BiDirectionalSync {
     private config: SyncConfig;
 
 
-    private syncTimer: NodeJS.Timer | null = null;
+    private syncTimer: NodeJS.Timeout | null = null;
 
 
     private isSyncing = false;
@@ -90,9 +88,7 @@ class BiDirectionalSync {
         this.config = config;
 
 
-        /**
-         * PostgreSQL local
-         */
+        /*** PostgreSQL local ***/
         this.pool = new Pool({
 
             host: config.postgresHost,
@@ -109,9 +105,7 @@ class BiDirectionalSync {
 
 
 
-        /**
-         * Supabase
-         */
+        /*** Supabase ***/
         this.supabase = createClient(
 
             config.supabaseUrl,
@@ -162,11 +156,6 @@ class BiDirectionalSync {
 
     }
 
-
-
-
-
-
     /*** Parar sincronização ***/
     stop() {
 
@@ -192,12 +181,6 @@ class BiDirectionalSync {
 
 
     }
-
-
-
-
-
-
 
     /*** Executa ciclo completo ***/
     private async sync() {
@@ -280,9 +263,7 @@ class BiDirectionalSync {
 
 
     }
-    /**
- * Sincronizar uma tabela específica
- */
+    /*** Sincronizar uma tabela específica ***/
     private async syncTable(tableName: string) {
 
         try {
@@ -303,10 +284,6 @@ class BiDirectionalSync {
 
             }
 
-
-
-
-
             // Buscar dados PostgreSQL
 
             const localResult = await this.pool.query(
@@ -319,13 +296,7 @@ class BiDirectionalSync {
             const localData = localResult.rows;
 
 
-
-
-
-
-            /**
-             * Supabase → PostgreSQL
-             */
+            /*** Supabase → PostgreSQL ***/
             await this.syncDirection(
 
                 tableName,
@@ -338,14 +309,7 @@ class BiDirectionalSync {
 
             );
 
-
-
-
-
-
-            /**
-             * PostgreSQL → Supabase
-             */
+            /*** PostgreSQL → Supabase ***/
             await this.syncDirection(
 
                 tableName,
@@ -357,11 +321,6 @@ class BiDirectionalSync {
                 'local-to-supabase'
 
             );
-
-
-
-
-
 
             console.log(
 
@@ -387,19 +346,7 @@ class BiDirectionalSync {
 
     }
 
-
-
-
-
-
-
-
-
-    /**
-     * Sincronização direção origem → destino
-     * 
-     * Resolve conflito automaticamente
-     */
+    /*** Sincronização direção origem → destino ** Resolve conflito automaticamente ***/
     private async syncDirection(
 
         tableName: string,
@@ -420,22 +367,12 @@ class BiDirectionalSync {
 
         );
 
-
-
-
-
-
         for (const sourceRecord of source) {
 
 
 
             const destRecord =
                 destMap.get(sourceRecord.id);
-
-
-
-
-
 
 
             // Registro novo
@@ -459,12 +396,6 @@ class BiDirectionalSync {
 
             }
 
-
-
-
-
-
-
             const sourceDate =
                 new Date(sourceRecord.updated_at);
 
@@ -474,16 +405,7 @@ class BiDirectionalSync {
                 new Date(destRecord.updated_at);
 
 
-
-
-
-
-
-
-
-            /**
-             * Origem mais atual
-             */
+        /*** Origem mais atual ***/
 
             if (sourceDate > destinationDate) {
 
@@ -505,17 +427,7 @@ class BiDirectionalSync {
 
             }
 
-
-
-
-
-
-
-
-            /**
-             * Destino mais atual
-             * Nada para fazer
-             */
+            /*** Destino mais atual *** Nada para fazer ***/
 
             if (destinationDate > sourceDate) {
 
@@ -525,17 +437,7 @@ class BiDirectionalSync {
 
             }
 
-
-
-
-
-
-
-
-            /**
-             * Mesmo horário
-             * Verificar diferença real
-             */
+            /*** Mesmo horário ** Verificar diferença real ***/
 
             const sourceJson =
                 JSON.stringify(sourceRecord);
@@ -544,10 +446,6 @@ class BiDirectionalSync {
 
             const destinationJson =
                 JSON.stringify(destRecord);
-
-
-
-
 
 
 
@@ -578,20 +476,7 @@ class BiDirectionalSync {
 
     }
 
-
-
-
-
-
-
-
-
-
-
-
-    /**
-     * Inserir registro
-     */
+    /*** Inserir registro ***/
     private async insertRecord(
 
         tableName: string,
@@ -665,11 +550,6 @@ class BiDirectionalSync {
 
             }
 
-
-
-
-
-
             await this.logSync(
 
                 tableName,
@@ -685,9 +565,6 @@ class BiDirectionalSync {
             );
 
 
-
-
-
         } catch (err) {
 
 
@@ -699,8 +576,6 @@ class BiDirectionalSync {
                 err
 
             );
-
-
 
 
             await this.logSync(
@@ -724,9 +599,7 @@ class BiDirectionalSync {
 
     }
 
-    /**
- * Atualizar registro no destino
- */
+    /*** Atualizar registro no destino ***/
     private async updateRecord(
 
         tableName: string,
@@ -818,10 +691,6 @@ class BiDirectionalSync {
             }
 
 
-
-
-
-
             await this.logSync(
 
                 tableName,
@@ -874,20 +743,7 @@ class BiDirectionalSync {
 
     }
 
-
-
-
-
-
-
-
-
-
-
-
-    /**
-     * Resolver conflito automaticamente
-     */
+    /*** Resolver conflito automaticamente ***/
     private async resolveConflict(
 
         tableName: string,
@@ -923,19 +779,7 @@ class BiDirectionalSync {
                 'destination';
 
 
-
-
-
-
-
-
-            /**
-             * Regra:
-             *
-             * supabase = Supabase vence
-             *
-             * local = PostgreSQL vence
-             */
+            /*** Regra:** supabase = Supabase vence ** local = PostgreSQL vence ***/
 
 
             if (this.config.syncPriority === 'supabase') {
@@ -962,13 +806,6 @@ class BiDirectionalSync {
 
 
             }
-
-
-
-
-
-
-
 
             if (winner === 'source') {
 
@@ -1004,9 +841,6 @@ class BiDirectionalSync {
                         'supabase-to-local';
 
 
-
-
-
                 await this.updateRecord(
 
                     tableName,
@@ -1020,12 +854,6 @@ class BiDirectionalSync {
 
 
             }
-
-
-
-
-
-
 
 
             // Guardar histórico
@@ -1044,18 +872,11 @@ class BiDirectionalSync {
 
 
 
-
-
-
-
             console.log(
 
                 `[SYNC] Conflito resolvido ${tableName}:${recordId} vencedor=${winner}`
 
             );
-
-
-
 
 
         } catch (err) {
@@ -1077,19 +898,7 @@ class BiDirectionalSync {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-    /**
-     * Registrar conflito para auditoria
-     */
+    /*** Registrar conflito para auditoria ***/
     private async recordConflict(
 
         tableName: string,
@@ -1166,17 +975,7 @@ class BiDirectionalSync {
 
     }
 
-
-
-
-
-
-
-
-
-    /**
-     * Log sincronização
-     */
+    /*** Log sincronização ***/
     private async logSync(
 
         tableName: string,
@@ -1244,17 +1043,7 @@ class BiDirectionalSync {
 
     }
 
-
-
-
-
-
-
-
-
-    /**
-     * Saúde do sincronizador
-     */
+    /*** Saúde do sincronizador ***/
     async checkHealth() {
 
 
@@ -1272,10 +1061,6 @@ class BiDirectionalSync {
 
 
         };
-
-
-
-
 
 
         try {
@@ -1303,12 +1088,6 @@ class BiDirectionalSync {
 
         }
 
-
-
-
-
-
-
         try {
 
 
@@ -1323,15 +1102,8 @@ class BiDirectionalSync {
                     .limit(1);
 
 
-
-
-
             health.supabase =
                 !!data;
-
-
-
-
 
             if (data?.[0]) {
 
@@ -1361,9 +1133,7 @@ class BiDirectionalSync {
 
     }
 
-    /**
-     * Fechar conexões
-     */
+    /*** Fechar conexões ***/
     async close() {
 
 
@@ -1381,9 +1151,6 @@ class BiDirectionalSync {
 
 
 }
-
-
-
 
 export default BiDirectionalSync;
 
