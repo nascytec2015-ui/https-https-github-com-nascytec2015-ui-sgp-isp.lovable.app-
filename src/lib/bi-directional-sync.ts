@@ -482,9 +482,9 @@ class BiDirectionalSync {
             }
             else {
                 const { error } =
-                    await this.supabase
-                        .from(tableName)
-                        .insert([record as any]);
+    await (this.supabase as any)
+        .from(tableName)
+        .insert([record]);
 
                 if (error) {
 
@@ -605,23 +605,18 @@ class BiDirectionalSync {
             }
             else {
 
-
-
                 const { error } =
 
-                    await this.supabase
+                    await (this.supabase as any)
 
                         .from(tableName)
 
-                        .update(record as any)
+                        .update(record)
 
                         .eq(
                             'id',
                             record.id
                         );
-
-
-
 
                 if (error) {
 
