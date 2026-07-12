@@ -18,7 +18,7 @@ export async function initializeSync() {
             postgresHost: process.env.POSTGRES_HOST || 'localhost',
             postgresPort: parseInt(process.env.POSTGRES_PORT || '5432'),
             postgresUser: process.env.POSTGRES_USER || 'postgresql',
-            postgresPassword: process.env.POSTGRES_PASSWORD || '',
+            postgresPassword: process.env.POSTGRES_PASSWORD || 'yOx49aQANuFp8NkP',
             postgresDB: process.env.POSTGRES_DB || 'sgp_isp',
             supabaseUrl: process.env.SUPABASE_URL || '',
             supabaseKey: process.env.SUPABASE_SERVICE_ROLE_KEY || '',
