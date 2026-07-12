@@ -192,8 +192,6 @@ class BiDirectionalSync {
 
         }
 
-
-
         this.isSyncing = true;
 
 
@@ -207,9 +205,6 @@ class BiDirectionalSync {
                 }`
 
             );
-
-
-
 
             for (const table of this.tables) {
 
@@ -238,9 +233,6 @@ class BiDirectionalSync {
 
 
             }
-
-
-
 
 
             console.log(
@@ -276,8 +268,6 @@ class BiDirectionalSync {
                     .from(tableName)
                     .select('*');
 
-
-
             if (supabaseError) {
 
                 throw supabaseError;
@@ -291,7 +281,6 @@ class BiDirectionalSync {
                 `SELECT * FROM public."${tableName}"`
 
             );
-
 
             const localData = localResult.rows;
 
@@ -328,8 +317,6 @@ class BiDirectionalSync {
 
             );
 
-
-
         } catch (err) {
 
 
@@ -359,8 +346,6 @@ class BiDirectionalSync {
 
     ) {
 
-
-
         const destMap = new Map(
 
             destination.map(r => [r.id, r])
@@ -369,8 +354,6 @@ class BiDirectionalSync {
 
         for (const sourceRecord of source) {
 
-
-
             const destRecord =
                 destMap.get(sourceRecord.id);
 
@@ -378,8 +361,6 @@ class BiDirectionalSync {
             // Registro novo
 
             if (!destRecord) {
-
-
 
                 await this.insertRecord(
 
@@ -391,15 +372,12 @@ class BiDirectionalSync {
 
                 );
 
-
                 continue;
 
             }
 
             const sourceDate =
                 new Date(sourceRecord.updated_at);
-
-
 
             const destinationDate =
                 new Date(destRecord.updated_at);
@@ -408,8 +386,6 @@ class BiDirectionalSync {
         /*** Origem mais atual ***/
 
             if (sourceDate > destinationDate) {
-
-
 
                 await this.updateRecord(
 
@@ -421,8 +397,6 @@ class BiDirectionalSync {
 
                 );
 
-
-
                 continue;
 
             }
@@ -431,9 +405,7 @@ class BiDirectionalSync {
 
             if (destinationDate > sourceDate) {
 
-
                 continue;
-
 
             }
 
@@ -442,16 +414,10 @@ class BiDirectionalSync {
             const sourceJson =
                 JSON.stringify(sourceRecord);
 
-
-
             const destinationJson =
                 JSON.stringify(destRecord);
 
-
-
             if (sourceJson !== destinationJson) {
-
-
 
                 await this.resolveConflict(
 
@@ -487,32 +453,19 @@ class BiDirectionalSync {
 
     ) {
 
-
         try {
 
-
-
             if (direction === 'supabase-to-local') {
-
-
 
                 const columns =
                     Object.keys(record)
                         .map(c => `"${c}"`)
                         .join(',');
 
-
-
-
                 const values =
                     Object.values(record)
                         .map((_, i) => `$${i + 1}`)
                         .join(',');
-
-
-
-
-
 
                 await this.pool.query(
 
@@ -526,28 +479,18 @@ class BiDirectionalSync {
                     Object.values(record)
 
                 );
-
-
-
             }
             else {
-
-
-
                 const { error } =
                     await this.supabase
                         .from(tableName)
                         .insert([record as any]);
-
-
 
                 if (error) {
 
                     throw error;
 
                 }
-
-
             }
 
             await this.logSync(
