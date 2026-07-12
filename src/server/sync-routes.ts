@@ -42,6 +42,7 @@ export async function initializeSync() {
             "PUBLISHABLE_KEY carregada:",
             !!process.env.SUPABASE_PUBLISHABLE_KEY
         );
+        
         syncService = new BiDirectionalSync(config);
         await syncService.start();
         isInitialized = true;
