@@ -613,7 +613,7 @@ class BiDirectionalSync {
 
                         .from(tableName)
 
-                        .update(record)
+                        .update(record as any)
 
                         .eq(
                             'id',
@@ -1053,8 +1053,8 @@ class BiDirectionalSync {
 
                 health.lastSync =
                     new Date(
-                        data[0].ultima_sincronizacao
-                    );
+                        (data[0] as any).ultima_sincronizacao
+                    ); 
 
 
             }
