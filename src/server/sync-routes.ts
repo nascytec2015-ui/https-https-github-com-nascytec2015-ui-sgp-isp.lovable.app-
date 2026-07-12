@@ -21,7 +21,7 @@ export async function initializeSync() {
             postgresPassword: process.env.POSTGRES_PASSWORD || '',
             postgresDB: process.env.POSTGRES_DB || 'sgp_isp',
             supabaseUrl: process.env.SUPABASE_URL || '',
-            supabaseKey: process.env.SUPABASE_PUBLISHABLE_KEY || '',
+            supabaseKey: process.env.SUPABASE_SERVICE_ROLE_KEY || '',
             syncInterval: parseInt(process.env.SYNC_INTERVAL || '30000'),
             syncPriority: (process.env.SYNC_PRIORITY as 'supabase' | 'local') || 'supabase',
         };
@@ -88,3 +88,4 @@ export async function stopSync() {
 }
 
 export default initializeSync;
+
