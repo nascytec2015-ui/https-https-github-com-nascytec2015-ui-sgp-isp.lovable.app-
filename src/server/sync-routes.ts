@@ -33,7 +33,15 @@ export async function initializeSync() {
             interval: config.syncInterval,
             priority: config.syncPriority
         });
-
+        console.log("SUPABASE_URL:", process.env.SUPABASE_URL);
+        console.log(
+            "SERVICE_ROLE_KEY carregada:",
+            !!process.env.SUPABASE_SERVICE_ROLE_KEY
+        );
+        console.log(
+            "PUBLISHABLE_KEY carregada:",
+            !!process.env.SUPABASE_PUBLISHABLE_KEY
+        );
         syncService = new BiDirectionalSync(config);
         await syncService.start();
         isInitialized = true;
