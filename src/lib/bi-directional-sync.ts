@@ -199,7 +199,6 @@ class BiDirectionalSync {
     /*** Executa ciclo completo ***/
     private async sync() {
 
-
         if (this.isSyncing) {
 
             return;
@@ -208,8 +207,7 @@ class BiDirectionalSync {
 
         this.isSyncing = true;
 
-        await this.updateSyncStatus('running');
-
+        // Inicia contador do tempo ANTES de atualizar o status
         this.syncStartTime = Date.now();
 
 
@@ -225,19 +223,24 @@ class BiDirectionalSync {
 
         };
 
+
         try {
+
+
+            await this.updateSyncStatus('running');
 
 
             console.log(
 
-                `[SYNC] Iniciando ciclo - ${new Date().toISOString()
-                }`
+                `[SYNC] Iniciando ciclo - ${new Date().toISOString()}`
 
             );
+
 
             for (const table of this.tables) {
 
                 try {
+
 
                     await this.syncTable(table);
 
@@ -254,8 +257,11 @@ class BiDirectionalSync {
 
 
                     console.error(
+
                         `[SYNC] Erro tabela ${table}`,
+
                         err
+
                     );
 
 
@@ -263,14 +269,33 @@ class BiDirectionalSync {
 
             }
 
+
             await this.updateSyncStatus('online');
+
 
             console.log(
 
-                `[SYNC] Ciclo concluído - ${new Date().toISOString()
-                }`
+                `[SYNC] Ciclo concluído - ${new Date().toISOString()}`
 
             );
+
+
+        } catch (err) {
+
+
+            this.syncStats.erros++;
+
+
+            console.error(
+
+                '[SYNC] Erro geral no ciclo:',
+
+                err
+
+            );
+
+
+            await this.updateSyncStatus('error');
 
 
         }
@@ -279,11 +304,15 @@ class BiDirectionalSync {
 
             this.isSyncing = false;
 
+            // limpa contador para evitar reutilização
+            this.syncStartTime = 0;
+
 
         }
 
 
     }
+
     /*** Sincronizar uma tabela específica ***/
     private async syncTable(tableName: string) {
 
