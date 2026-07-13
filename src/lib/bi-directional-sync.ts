@@ -715,9 +715,7 @@ class BiDirectionalSync {
     `,
                     [
                         record.id,
-                        ...fields.map(
-                            f => (updateData as Record<string, any>)[f]
-                        )
+                        ...fields.map(f => updateData[f])
                     ]
                 );
 
