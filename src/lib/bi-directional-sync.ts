@@ -821,11 +821,8 @@ class BiDirectionalSync {
 
         try {
 
-
             console.warn(
-
                 `[SYNC] Resolvendo conflito ${tableName}:${recordId}`
-
             );
 
             const sourceUpdated =
@@ -842,10 +839,9 @@ class BiDirectionalSync {
                 return;
             }
 
-            let winner:
-                'source'
-                |
-                'destination';
+            let winner: 'source' | 'destination';
+
+            
 
 
             /*** Regra:** supabase = Supabase vence ** local = PostgreSQL vence ***/
