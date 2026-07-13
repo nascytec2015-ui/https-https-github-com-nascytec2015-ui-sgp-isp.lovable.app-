@@ -59,7 +59,19 @@ class BiDirectionalSync {
 
     private isSyncing = false;
 
+    private syncStartTime = 0;
 
+    private syncStats = {
+
+        tabelas: 0,
+
+        ok: 0,
+
+        conflitos: 0,
+
+        erros: 0
+
+    };
 
     /*** Tabelas sincronizadas ***/
     private tables = [
@@ -194,7 +206,20 @@ class BiDirectionalSync {
 
         this.isSyncing = true;
 
+        this.syncStartTime = Date.now();
 
+
+        this.syncStats = {
+
+            tabelas: 0,
+
+            ok: 0,
+
+            conflitos: 0,
+
+            erros: 0
+
+        };
 
         try {
 
@@ -208,32 +233,31 @@ class BiDirectionalSync {
 
             for (const table of this.tables) {
 
-
                 try {
 
+                    await this.syncTable(table);
 
-                    await this.syncTable(
-                        table
-                    );
+
+                    this.syncStats.tabelas++;
+
+                    this.syncStats.ok++;
 
 
                 } catch (err) {
 
 
+                    this.syncStats.erros++;
+
+
                     console.error(
-
-                        `[SYNC] Erro tabela ${table}:`,
-
+                        `[SYNC] Erro tabela ${table}`,
                         err
-
                     );
 
 
                 }
 
-
             }
-
 
             console.log(
 
