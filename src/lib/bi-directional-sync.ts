@@ -440,23 +440,41 @@ class BiDirectionalSync {
             const destinationDate =
                 new Date(destRecord.updated_at);
 
+            // ===== DEBUG =====
+            console.log(
+                `[SYNC-DEBUG] ${tableName}:${sourceRecord.id}`
+            );
+            console.log(
+                `   source      = ${sourceRecord.updated_at}`
+            );
+            console.log(
+                `   destination = ${destRecord.updated_at}`
+            );
+            console.log(
+                `   diff(ms)    = ${sourceDate.getTime() - destinationDate.getTime()
+                }`
+            );
+            // =================
 
-        /*** Origem mais atual ***/
+            const diff = Math.abs(
+                sourceDate.getTime() - destinationDate.getTime()
+            );
 
+            // Ignora diferenças menores que 1 segundo
+            if (diff < 1000) {
+                continue;
+            }
+
+            /*** Origem mais atual ***/
             if (sourceDate > destinationDate) {
 
                 await this.updateRecord(
-
                     tableName,
-
                     sourceRecord,
-
                     direction
-
                 );
 
                 continue;
-
             }
 
             /*** Destino mais atual *** Nada para fazer ***/
@@ -570,7 +588,6 @@ class BiDirectionalSync {
                     Object.values(record)
                 );
             }
-            
             else {
                 const { error } =
     await (this.supabase as any)
