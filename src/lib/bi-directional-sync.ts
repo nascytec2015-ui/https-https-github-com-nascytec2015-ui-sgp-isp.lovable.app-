@@ -206,6 +206,8 @@ class BiDirectionalSync {
 
         this.isSyncing = true;
 
+        await this.updateSyncStatus('running');
+
         this.syncStartTime = Date.now();
 
 
@@ -1159,7 +1161,7 @@ class BiDirectionalSync {
         }
 
     }
-    
+
     /*** Fechar conexões ***/
     async close() {
 
