@@ -9,12 +9,11 @@ interface SyncRecord {
 
     id: string;
 
-    updated_at?: string;
+    updated_at?: string | null;
 
-    created_at?: string;
+    created_at?: string | null;
 
     [key: string]: any;
-
 }
 
 /*** Configuração do sincronizador ***/
@@ -601,16 +600,36 @@ class BiDirectionalSync {
                 );
             }
             else {
+
+
+                const {
+                    updated_at,
+                    created_at,
+                    ...updateData
+                } = record;
+
+
                 const { error } =
-    await (this.supabase as any)
-        .from(tableName)
-        .insert([record]);
+
+                    await (this.supabase as any)
+
+                        .from(tableName)
+
+                        .update(updateData)
+
+                        .eq(
+                            'id',
+                            record.id
+                        );
+
 
                 if (error) {
 
                     throw error;
 
                 }
+
+
             }
 
             await this.logSync(
