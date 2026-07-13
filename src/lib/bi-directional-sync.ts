@@ -672,43 +672,23 @@ class BiDirectionalSync {
                     ...updateData
                 } = record;
 
-                delete updateData.updated_at;
-                delete updateData.created_at;
+                const fields = Object.keys(updateData).filter(k => k !== "id");
 
-                const fields =
-                    Object.keys(updateData)
-                        .filter(k => k !== 'id');
-
-
-                const setClauses =
-                    fields
-                        .map(
-                            (field, index) =>
-                                `"${field}" = $${index + 2}`
-                        )
-                        .join(',');
-
+                const setClauses = fields
+                    .map((field, index) => `"${field}" = $${index + 2}`)
+                    .join(",");
 
                 await this.pool.query(
-
                     `
-                    UPDATE public."${tableName}"
-                    SET ${setClauses}
-                    WHERE id = $1
-                    `,
-
-
+    UPDATE public."${tableName}"
+    SET ${setClauses}
+    WHERE id = $1
+    `,
                     [
-
                         record.id,
-
                         ...fields.map(f => updateData[f])
-
                     ]
-
-                );
-
-
+                ); 
 
             }
             else {
