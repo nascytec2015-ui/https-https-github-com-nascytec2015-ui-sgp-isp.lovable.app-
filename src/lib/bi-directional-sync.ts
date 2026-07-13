@@ -59,7 +59,7 @@ class BiDirectionalSync {
 
     private isSyncing = false;
 
-    private syncStartTime = 0;
+    private syncStartTime: number = 0;
 
     private syncStats = {
 
