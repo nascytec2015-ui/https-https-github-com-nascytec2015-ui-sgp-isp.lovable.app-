@@ -525,19 +525,52 @@ class BiDirectionalSync {
                         .map((_, i) => `$${i + 1}`)
                         .join(',');
 
+                // Garantir dependências antes de inserir
+                if (tableName === 'profiles') {
+
+                    const check = await this.pool.query(
+                        `SELECT 1 FROM public.users WHERE id = $1`,
+                        [record.id]
+                    );
+
+                    if (check.rowCount === 0) {
+
+                        console.warn(
+                            `[SYNC] Pulando profile ${record.id}: usuário não existe`
+                        );
+
+                        return;
+                    }
+                }
+
+                if (tableName === 'user_roles') {
+
+                    const check = await this.pool.query(
+                        `SELECT 1 FROM public.users WHERE id = $1`,
+                        [record.user_id]
+                    );
+
+                    if (check.rowCount === 0) {
+
+                        console.warn(
+                            `[SYNC] Pulando user_role ${record.user_id}: usuário não existe`
+                        );
+
+                        return;
+                    }
+                }
+
                 await this.pool.query(
-
                     `
-                    INSERT INTO public."${tableName}"
-                    (${columns})
-                    VALUES (${values})
-                    ON CONFLICT(id) DO NOTHING
-                    `,
-
+    INSERT INTO public."${tableName}"
+    (${columns})
+    VALUES (${values})
+    ON CONFLICT(id) DO NOTHING
+    `,
                     Object.values(record)
-
                 );
             }
+            
             else {
                 const { error } =
     await (this.supabase as any)
