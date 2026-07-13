@@ -76,6 +76,8 @@ class BiDirectionalSync {
     /*** Tabelas sincronizadas ***/
     private tables = [
 
+        'users',
+
         'profiles',
 
         'user_roles',
