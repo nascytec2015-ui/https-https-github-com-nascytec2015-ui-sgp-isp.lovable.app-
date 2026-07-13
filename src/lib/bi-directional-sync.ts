@@ -603,8 +603,7 @@ class BiDirectionalSync {
 
 
                 const {
-                    updated_at,
-                    created_at,
+                    
                     ...updateData
                 } = record;
 
