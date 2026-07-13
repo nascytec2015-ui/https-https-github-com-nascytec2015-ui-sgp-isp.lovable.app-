@@ -9,9 +9,12 @@ interface SyncRecord {
 
     id: string;
 
-    updated_at: string;
+    updated_at?: string;
+
+    created_at?: string;
 
     [key: string]: any;
+
 }
 
 /*** Configuração do sincronizador ***/
@@ -684,8 +687,13 @@ class BiDirectionalSync {
     SET ${setClauses}
     WHERE id = $1
     `,
-                    ...fields.map(f => (updateData as Record<string, any>)[f])
-                ); 
+                    [
+                        record.id,
+                        ...fields.map(
+                            f => (updateData as Record<string, any>)[f]
+                        )
+                    ]
+                );
 
             }
             else {
