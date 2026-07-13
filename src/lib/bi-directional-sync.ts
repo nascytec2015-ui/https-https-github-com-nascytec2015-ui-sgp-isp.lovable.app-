@@ -679,8 +679,6 @@ class BiDirectionalSync {
             if (direction === 'supabase-to-local') {
 
                 const {
-                    updated_at,
-                    created_at,
                     ...updateData
                 } = record;
 
