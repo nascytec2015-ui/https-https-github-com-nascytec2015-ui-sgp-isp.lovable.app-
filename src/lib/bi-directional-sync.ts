@@ -666,13 +666,18 @@ class BiDirectionalSync {
 
             if (direction === 'supabase-to-local') {
 
+                const {
+                    updated_at,
+                    created_at,
+                    ...updateData
+                } = record;
 
+                delete updateData.updated_at;
+                delete updateData.created_at;
 
                 const fields =
-                    Object.keys(record)
+                    Object.keys(updateData)
                         .filter(k => k !== 'id');
-
-
 
 
                 const setClauses =
@@ -682,9 +687,6 @@ class BiDirectionalSync {
                                 `"${field}" = $${index + 2}`
                         )
                         .join(',');
-
-
-
 
 
                 await this.pool.query(
@@ -700,9 +702,7 @@ class BiDirectionalSync {
 
                         record.id,
 
-                        ...fields.map(
-                            f => record[f]
-                        )
+                        ...fields.map(f => updateData[f])
 
                     ]
 
@@ -804,7 +804,9 @@ class BiDirectionalSync {
 
     ) {
 
-
+        if (tableName === "users") {
+            return;
+        }
 
         try {
 
@@ -815,9 +817,19 @@ class BiDirectionalSync {
 
             );
 
+            const sourceUpdated =
+                source.updated_at ??
+                source.created_at ??
+                null;
 
+            const destinationUpdated =
+                destination.updated_at ??
+                destination.created_at ??
+                null;
 
-
+            if (!sourceUpdated || !destinationUpdated) {
+                return;
+            }
 
             let winner:
                 'source'
