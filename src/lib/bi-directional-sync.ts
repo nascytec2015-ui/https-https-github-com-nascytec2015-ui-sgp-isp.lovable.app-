@@ -603,14 +603,15 @@ class BiDirectionalSync {
 
 
                 const {
-                    
-                    ...updateData
+                    updated_at,
+                    created_at,
+                    ...insertData
                 } = record;
 
                 const { error } =
                     await (this.supabase as any)
                         .from(tableName)
-                        .insert([record]);
+                        .insert([insertData]);
 
                 if (error) {
                     throw error;
@@ -698,27 +699,7 @@ class BiDirectionalSync {
                     ...updateData
                 } = record;
 
-                const fields = Object.keys(updateData).filter(k => k !== "id");
-
-                const setClauses = fields
-                    .map((field, index) => `"${field}" = $${index + 2}`)
-                    .join(",");
-
-                await this.pool.query(
-                    `
-    UPDATE public."${tableName}"
-    SET ${setClauses}
-    WHERE id = $1
-    `,
-                    [
-                        record.id,
-                        ...fields.map(f => updateData[f])
-                    ]
-                );
-
-            }
-            else {
-
+                
                 const { error } =
 
                     await (this.supabase as any)
@@ -737,8 +718,6 @@ class BiDirectionalSync {
                     throw error;
 
                 }
-
-
 
             }
 
