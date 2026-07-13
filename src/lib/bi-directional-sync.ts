@@ -1095,6 +1095,71 @@ class BiDirectionalSync {
 
     }
 
+    private async updateSyncStatus(status: string) {
+
+        try {
+
+
+            const tempo =
+                Date.now() - this.syncStartTime;
+
+
+
+            await this.pool.query(
+
+                `
+            UPDATE public.sync_status
+
+            SET
+
+            ultima_execucao = NOW(),
+
+            status = $1,
+
+            tabelas_processadas = $2,
+
+            tabelas_ok = $3,
+
+            conflitos_resolvidos = $4,
+
+            erros = $5,
+
+            tempo_execucao = $6
+
+            WHERE id = 1
+            `,
+
+
+                [
+
+                    status,
+
+                    this.syncStats.tabelas,
+
+                    this.syncStats.ok,
+
+                    this.syncStats.conflitos,
+
+                    this.syncStats.erros,
+
+                    tempo
+
+                ]
+
+            );
+
+
+        } catch (err) {
+
+            console.error(
+                '[SYNC] Erro atualizando status:',
+                err
+            );
+
+        }
+
+    }
+    
     /*** Fechar conexões ***/
     async close() {
 
