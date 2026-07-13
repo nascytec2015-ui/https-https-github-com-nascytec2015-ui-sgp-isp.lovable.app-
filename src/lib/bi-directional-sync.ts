@@ -437,11 +437,20 @@ class BiDirectionalSync {
 
             }
 
-            const sourceDate =
-                new Date(sourceRecord.updated_at);
+            const sourceTimestamp =
+                sourceRecord.updated_at ??
+                sourceRecord.created_at;
 
-            const destinationDate =
-                new Date(destRecord.updated_at);
+            const destinationTimestamp =
+                destRecord.updated_at ??
+                destRecord.created_at;
+
+            if (!sourceTimestamp || !destinationTimestamp) {
+                continue;
+            }
+
+            const sourceDate = new Date(sourceTimestamp);
+            const destinationDate = new Date(destinationTimestamp);
 
             // ===== DEBUG =====
             console.log(
