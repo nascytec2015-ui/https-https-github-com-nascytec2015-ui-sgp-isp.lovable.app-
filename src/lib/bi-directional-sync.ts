@@ -261,13 +261,14 @@ class BiDirectionalSync {
 
             }
 
+            await this.updateSyncStatus('online');
+
             console.log(
 
                 `[SYNC] Ciclo concluído - ${new Date().toISOString()
                 }`
 
             );
-
 
 
         }
