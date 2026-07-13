@@ -607,19 +607,15 @@ class BiDirectionalSync {
                     ...updateData
                 } = record;
 
-
                 const { error } =
-
                     await (this.supabase as any)
-
                         .from(tableName)
+                        .insert([record]);
 
-                        .update(updateData)
-
-                        .eq(
-                            'id',
-                            record.id
-                        );
+                if (error) {
+                    throw error;
+                }
+                
 
 
                 if (error) {
