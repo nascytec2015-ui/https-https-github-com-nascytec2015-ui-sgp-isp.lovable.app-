@@ -684,10 +684,7 @@ class BiDirectionalSync {
     SET ${setClauses}
     WHERE id = $1
     `,
-                    [
-                        record.id,
-                        ...fields.map(f => updateData[f])
-                    ]
+                    ...fields.map(f => (updateData as Record<string, any>)[f])
                 ); 
 
             }
