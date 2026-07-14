@@ -1,0 +1,48 @@
+model Tecnico {
+  id          String   @id @default(uuid())
+  nome        String
+  telefone    String?
+  email       String?
+  cargo       String?
+  equipe      String?
+  foto        String?
+  assinatura  String?
+  ativo       Boolean @default(true)
+
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  ordens OrdemServico[]
+}
+model OrdemServico {
+
+  ...
+
+  tecnicoId String?
+
+  tecnico Tecnico?
+      @relation(fields: [tecnicoId], references: [id])
+
+}
+model OSEvidencia {
+
+  id          String   @id @default(uuid())
+
+  osId        String
+
+  tipo        String
+
+  arquivo     String
+
+  descricao   String?
+
+  latitude    Float?
+
+  longitude   Float?
+
+  created_at  DateTime @default(now())
+
+  ordem OrdemServico
+      @relation(fields: [osId], references: [id])
+
+}
