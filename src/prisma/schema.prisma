@@ -57,3 +57,13 @@ model OSEvidencia {
 
   @@index([osId])
 }
+
+enum OsTipo {
+  INSTALACAO
+  MANUTENCAO
+  SUPORTE
+  VISITA_TECNICA
+  MUDANCA_ENDERECO
+  CANCELAMENTO
+}
+
