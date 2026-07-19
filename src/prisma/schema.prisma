@@ -1,3 +1,11 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
 model Tecnico {
   id           String   @id @default(uuid())
   nome         String
@@ -66,4 +74,5 @@ enum OsTipo {
   MUDANCA_ENDERECO
   CANCELAMENTO
 }
+
 
