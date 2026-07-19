@@ -92,7 +92,7 @@ const TIPO_LABEL: Record<OSTipo, string> = {
 const STATUS_LABEL: Record<OSStatus, string> = {
   aberta: "Aberta",
   agendada: "Agendada",
-  em_andamento: "Em andamento",
+  em_execucao: "em_execucao",
   concluida: "Concluída",
   cancelada: "Cancelada",
 };
@@ -100,7 +100,7 @@ const STATUS_LABEL: Record<OSStatus, string> = {
 const STATUS_VARIANT: Record<OSStatus, "default" | "secondary" | "destructive" | "outline"> = {
   aberta: "outline",
   agendada: "secondary",
-  em_andamento: "default",
+  em_execucao: "default",
   concluida: "secondary",
   cancelada: "destructive",
 };
@@ -108,7 +108,7 @@ const STATUS_VARIANT: Record<OSStatus, "default" | "secondary" | "destructive" |
 const osSchema = z.object({
   cliente_id: z.string().uuid("Selecione um cliente"),
   tipo: z.enum(["instalacao", "manutencao", "mudanca_endereco", "visita_tecnica"]),
-  status: z.enum(["aberta", "agendada", "em_andamento", "concluida", "cancelada"]),
+  status: z.enum(["aberta", "agendada", "em_execucao", "concluida", "cancelada"]),
   descricao: z.string().trim().min(3, "Descreva o serviço").max(2000),
   tecnico_id: z.string().uuid().nullable(),
   cto_ref: z.string().max(80).nullable(),
