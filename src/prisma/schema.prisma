@@ -14,18 +14,24 @@ model Tecnico {
 
   ordens OrdemServico[]
 }
-model OrdemServico {
 
-  ...
+model OrdemServico {
+  id          String   @id @default(uuid())
+  clienteId   String
+  status      String
+  prioridade  String?
+  descricao   String?
+  abertura    DateTime @default(now())
+
+  cliente      Cliente  @relation(fields: [clienteId], references: [id])
+  materiais    OSMaterial[]
+  evidencias   OSEvidencia[]
 
   tecnicoId String?
-
-  tecnico Tecnico?
-      @relation(fields: [tecnicoId], references: [id])
-
+  tecnico   Tecnico? @relation(fields: [tecnicoId], references: [id])
 }
-model OSEvidencia {
 
+model OSEvidencia {
   id          String   @id @default(uuid())
 
   osId        String
@@ -42,7 +48,5 @@ model OSEvidencia {
 
   created_at  DateTime @default(now())
 
-  ordem OrdemServico
-      @relation(fields: [osId], references: [id])
-
+  ordem OrdemServico @relation(fields: [osId], references: [id])
 }
