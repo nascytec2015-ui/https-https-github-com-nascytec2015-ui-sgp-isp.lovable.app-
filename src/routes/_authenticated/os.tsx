@@ -43,14 +43,7 @@ export const Route = createFileRoute("/_authenticated/os")({
 });
 
 type OSTipo = "instalacao" | "manutencao" | "mudanca_endereco" | "visita_tecnica";
-type OSStatus =
-  | "aberta"
-  | "agendada"
-  | "em_deslocamento"
-  | "em_andamento"
-  | "aguardando_material"
-  | "concluida"
-  | "cancelada";
+type OSStatus = "aberta" | "agendada" | "em_andamento" | "concluida" | "cancelada";
 
 type Material = {
   id?: string;
