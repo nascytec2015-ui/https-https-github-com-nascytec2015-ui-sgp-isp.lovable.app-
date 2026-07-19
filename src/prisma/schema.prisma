@@ -48,22 +48,29 @@ model OrdemServico {
 }
 
 model OSEvidencia {
-  id String @id @default(uuid())
+  id          String   @id @default(uuid())
 
-  osId String
+  osId        String
 
-  tipo      String
-  arquivo   String
-  descricao String?
+  tipo        String   // foto | video
 
-  latitude  Float?
-  longitude Float?
+  categoria   String?  // antes | depois | cto | onu | velocidade
 
-  created_at DateTime @default(now())
+  arquivo     String
+
+  descricao   String?
+
+  latitude    Float?
+
+  longitude   Float?
+
+  dataHora    DateTime @default(now())
+
+  dispositivo String?
+
+  tecnicoId   String?
 
   ordem OrdemServico @relation(fields: [osId], references: [id], onDelete: Cascade)
-
-  @@index([osId])
 }
 
 enum OsTipo {
@@ -96,3 +103,4 @@ model OSMaterial {
 
   ordemServico OrdemServico @relation(fields: [ordemServicoId], references: [id], onDelete: Cascade)
 }
+
