@@ -103,7 +103,6 @@ export type Database = {
           data_inicio: string | null;
           descricao: string;
           endereco_atendimento: string | null;
-          forma_pagamento: string | null;
           id: string;
           numero: number;
           observacoes_cliente: string | null;
@@ -114,7 +113,7 @@ export type Database = {
           tecnico_id: string | null;
           tipo: Database["public"]["Enums"]["os_tipo"];
           updated_at: string;
-          valor: number | null;
+         
         };
         Insert: {
           assinatura_cliente?: string | null;
@@ -127,7 +126,6 @@ export type Database = {
           data_inicio?: string | null;
           descricao: string;
           endereco_atendimento?: string | null;
-          forma_pagamento?: string | null;
           id?: string;
           numero?: number;
           observacoes_cliente?: string | null;
@@ -138,7 +136,6 @@ export type Database = {
           tecnico_id?: string | null;
           tipo: Database["public"]["Enums"]["os_tipo"];
           updated_at?: string;
-          valor?: number | null;
         };
         Update: {
           assinatura_cliente?: string | null;
@@ -151,7 +148,6 @@ export type Database = {
           data_inicio?: string | null;
           descricao?: string;
           endereco_atendimento?: string | null;
-          forma_pagamento?: string | null;
           id?: string;
           numero?: number;
           observacoes_cliente?: string | null;
@@ -162,7 +158,7 @@ export type Database = {
           tecnico_id?: string | null;
           tipo?: Database["public"]["Enums"]["os_tipo"];
           updated_at?: string;
-          valor?: number | null;
+         
         };
         Relationships: [
           {
@@ -189,7 +185,7 @@ export type Database = {
           os_id: string;
           quantidade: number;
           unidade: string | null;
-          valor_unitario: number | null;
+          
         };
         Insert: {
           created_at?: string;
@@ -198,7 +194,7 @@ export type Database = {
           os_id: string;
           quantidade?: number;
           unidade?: string | null;
-          valor_unitario?: number | null;
+          
         };
         Update: {
           created_at?: string;
@@ -207,7 +203,7 @@ export type Database = {
           os_id?: string;
           quantidade?: number;
           unidade?: string | null;
-          valor_unitario?: number | null;
+          
         };
         Relationships: [
           {
@@ -469,7 +465,7 @@ export const Constants = {
     Enums: {
       app_role: ["admin", "tecnico", "atendente"],
       cliente_status: ["ativo", "bloqueado", "cancelado"],
-      os_status: ["aberta", "agendada", "em_andamento", "concluida", "cancelada"],
+      os_status: ["aberta", "agendada", "em_execucao", "em deslocamento", "aguardando material", "concluida", "cancelada"],
       os_tipo: ["instalacao", "manutencao", "mudanca_endereco", "visita_tecnica"],
     },
   },

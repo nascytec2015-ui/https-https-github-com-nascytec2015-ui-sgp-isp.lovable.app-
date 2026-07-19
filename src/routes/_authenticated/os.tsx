@@ -256,8 +256,6 @@ function OSPage() {
         data_agendada: (form.get("data_agendada") as string) || null,
         data_inicio: (form.get("data_inicio") as string) || null,
         data_conclusao: (form.get("data_conclusao") as string) || null,
-        valor: Number(form.get("valor") || 0),
-        forma_pagamento: (form.get("forma_pagamento") as string) || null,
         assinatura_cliente: (form.get("assinatura_cliente") as string) || null,
         observacoes_cliente: (form.get("observacoes_cliente") as string) || null,
         observacoes_internas: (form.get("observacoes_internas") as string) || null,
