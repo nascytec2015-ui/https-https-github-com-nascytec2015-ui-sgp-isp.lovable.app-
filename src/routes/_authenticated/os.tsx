@@ -1,24 +1,27 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
-import { useEffect, useMemo, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { toast } from "sonner";
-import { Plus, Pencil, Trash2, ClipboardList, Search } from "lucide-react";
+import { Plus, Pencil, Trash2, ClipboardList, Search, Upload, X } from "lucide-react";
 import { z } from "zod";
+
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
+
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
   DialogFooter,
 } from "@/components/ui/dialog";
+
 import {
   Table,
   TableBody,
@@ -27,7 +30,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+
 import { Badge } from "@/components/ui/badge";
+
 import {
   Select,
   SelectContent,
@@ -35,15 +40,32 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useClienteData } from "@/hooks/use-cliente-data";
+
 
 export const Route = createFileRoute("/_authenticated/os")({
-  head: () => ({ meta: [{ title: "Ordens de Serviço — ISP Manager" }] }),
+  head: () => ({
+    meta: [{ title: "Ordens de Serviço — ISP Manager" }],
+  }),
   component: OSPage,
 });
 
-type OSTipo = "instalacao" | "manutencao" | "mudanca_endereco" | "visita_tecnica";
-type OSStatus = "aberta" | "agendada" | "em_execucao" | "em_deslocamento"| "aguardando_material" | "concluida" | "cancelada";
+
+type OSTipo =
+  | "instalacao"
+  | "manutencao"
+  | "mudanca_endereco"
+  | "visita_tecnica";
+
+
+type OSStatus =
+  | "aberta"
+  | "agendada"
+  | "em_execucao"
+  | "em_deslocamento"
+  | "aguardando_material"
+  | "concluida"
+  | "cancelada";
+
 
 type Material = {
   id?: string;
@@ -52,91 +74,274 @@ type Material = {
   unidade: string;
 };
 
+
+type Evidencia = {
+  id?: string;
+  tipo: "foto" | "video";
+  arquivo: File | null;
+  descricao: string;
+  url?: string;
+};
+
+
 type OS = {
   id: string;
   numero: number;
+
   cliente_id: string;
+
   tipo: OSTipo;
   status: OSStatus;
+
   descricao: string;
+
   tecnico_id: string | null;
+
   cto_ref: string | null;
   porta_cto: number | null;
+
   endereco_atendimento: string | null;
+
   data_agendada: string | null;
   data_inicio: string | null;
   data_conclusao: string | null;
-  forma_pagamento: string | null;
+
   assinatura_cliente: string | null;
+
   observacoes_cliente: string | null;
   observacoes_internas: string | null;
-  clientes?: { nome: string } | null;
+
+  clientes?: {
+    nome: string;
+  } | null;
 };
+
 
 const TIPO_LABEL: Record<OSTipo, string> = {
+
   instalacao: "Instalação",
+
   manutencao: "Manutenção/Reparo",
+
   mudanca_endereco: "Mudança de endereço",
+
   visita_tecnica: "Visita técnica",
+
 };
+
 
 const STATUS_LABEL: Record<OSStatus, string> = {
+
   aberta: "Aberta",
+
   agendada: "Agendada",
+
   em_execucao: "Em execução",
+
   em_deslocamento: "Em deslocamento",
+
   aguardando_material: "Aguardando material",
+
   concluida: "Concluída",
+
   cancelada: "Cancelada",
+
 };
 
-const STATUS_VARIANT: Record<OSStatus, "default" | "secondary" | "destructive" | "outline"> = {
+
+
+const STATUS_VARIANT: Record<
+  OSStatus,
+  "default" | "secondary" | "destructive" | "outline"
+> = {
+
   aberta: "outline",
+
   agendada: "secondary",
+
   em_execucao: "default",
+
   em_deslocamento: "default",
+
   aguardando_material: "default",
+
   concluida: "secondary",
+
   cancelada: "destructive",
+
 };
+
+
 
 const osSchema = z.object({
-  cliente_id: z.string().uuid("Selecione um cliente"),
-  tipo: z.enum(["instalacao", "manutencao", "mudanca_endereco", "visita_tecnica"]),
-  status: z.enum(["aberta", "agendada", "em_execucao", "em deslocamento", "aguardando material", "concluida", "cancelada"]),
-  descricao: z.string().trim().min(3, "Descreva o serviço").max(2000),
-  tecnico_id: z.string().uuid().nullable(),
-  cto_ref: z.string().max(80).nullable(),
-  porta_cto: z.number().int().min(0).max(999).nullable(),
-  endereco_atendimento: z.string().max(300).nullable(),
-  data_agendada: z.string().nullable(),
-  data_inicio: z.string().nullable(),
-  data_conclusao: z.string().nullable(),
-  assinatura_cliente: z.string().max(120).nullable(),
-  observacoes_cliente: z.string().max(1000).nullable(),
-  observacoes_internas: z.string().max(1000).nullable(),
+
+  cliente_id:
+    z.string().uuid("Selecione um cliente"),
+
+
+  tipo:
+    z.enum([
+      "instalacao",
+      "manutencao",
+      "mudanca_endereco",
+      "visita_tecnica"
+    ]),
+
+
+  status:
+    z.enum([
+      "aberta",
+      "agendada",
+      "em_execucao",
+      "em_deslocamento",
+      "aguardando_material",
+      "concluida",
+      "cancelada"
+    ]),
+
+
+  descricao:
+    z.string()
+      .trim()
+      .min(3, "Descreva o serviço")
+      .max(2000),
+
+
+  tecnico_id:
+    z.string().uuid().nullable(),
+
+
+  cto_ref:
+    z.string().max(80).nullable(),
+
+
+  porta_cto:
+    z.number().int().min(0).max(999).nullable(),
+
+
+  endereco_atendimento:
+    z.string().max(300).nullable(),
+
+
+  data_agendada:
+    z.string().nullable(),
+
+
+  data_inicio:
+    z.string().nullable(),
+
+
+  data_conclusao:
+    z.string().nullable(),
+
+
+  assinatura_cliente:
+    z.string().max(120).nullable(),
+
+
+  observacoes_cliente:
+    z.string().max(1000).nullable(),
+
+
+  observacoes_internas:
+    z.string().max(1000).nullable(),
+
+
 });
 
+
+
 function toDtLocal(v: string | null | undefined) {
+
   if (!v) return "";
+
   const d = new Date(v);
+
   const pad = (n: number) => String(n).padStart(2, "0");
+
+
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+
 }
 
 function OSPage() {
+  
+  async function uploadEvidencia(
+    osId: string,
+    evidencia: Evidencia
+  ) {
+
+    if (!evidencia.arquivo)
+      return;
+
+
+    const arquivo = evidencia.arquivo;
+
+
+    const nomeArquivo =
+      `${osId}/${Date.now()}-${arquivo.name}`;
+
+
+    const { error: uploadError } = await supabase
+      .storage
+      .from("os-evidencias")
+      .upload(
+        nomeArquivo,
+        arquivo
+      );
+
+
+    if (uploadError)
+      throw uploadError;
+
+
+
+    const { data: urlData } = supabase
+      .storage
+      .from("os-evidencias")
+      .getPublicUrl(nomeArquivo);
+
+
+
+    const { error: dbError } = await supabase
+      .from("os_evidencias")
+      .insert({
+
+        os_id: osId,
+
+        tipo: evidencia.tipo,
+
+        arquivo: urlData.publicUrl,
+
+        descricao: evidencia.descricao || null
+
+      });
+
+
+    if (dbError)
+      throw dbError;
+
+  }
+
   const qc = useQueryClient();
   const { isAdmin, hasRole } = useAuth();
   const canCreate = isAdmin || hasRole("atendente");
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<OS | null>(null);
-  const [materiais, setMateriais] = useState<Material[]>([]);
-  const [filter, setFilter] = useState("");
-  const [statusFilter, setStatusFilter] = useState<OSStatus | "todos">("todos");
-  const [selectedClientId, setSelectedClientId] = useState("");
-  const [enderecoPreenchido, setEnderecoPreenchido] = useState("");
-  const enderecoInputRef = useRef<HTMLInputElement>(null);
 
+const [evidencias, setEvidencias] = useState<Evidencia[]>([]);
+
+const [filter, setFilter] = useState("");
+
+const [statusFilter, setStatusFilter] =
+  useState<OSStatus | "todos">("todos");
+
+const [selectedClientId, setSelectedClientId] = useState("");
+
+const [enderecoPreenchido, setEnderecoPreenchido] =
+  useState("");
+
+const enderecoInputRef = useRef<HTMLInputElement>(null);
   const { data: clienteData } = useQuery({
     queryKey: ['cliente-completo', selectedClientId],
     enabled: !!selectedClientId,
@@ -150,8 +355,10 @@ function OSPage() {
       if (error) throw error;
       return data;
     }
+
   });
 
+  
   // Quando cliente muda, preencher endereço automaticamente
   useEffect(() => {
     if (clienteData) {
@@ -219,6 +426,8 @@ function OSPage() {
       return data as Material[];
     },
   });
+
+  
 
   function openNew() {
     setEditing(null);
