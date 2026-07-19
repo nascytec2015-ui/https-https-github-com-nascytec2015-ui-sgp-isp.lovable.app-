@@ -7,61 +7,61 @@ datasource db {
 }
 
 model Tecnico {
-  id           String   @id @default(uuid())
-  nome         String
-  telefone     String?
-  email        String?
-  cargo        String?
-  equipe       String?
-  foto         String?
-  assinatura   String?
-  ativo        Boolean  @default(true)
+  id         String  @id @default(uuid())
+  nome       String
+  telefone   String?
+  email      String?
+  cargo      String?
+  equipe     String?
+  foto       String?
+  assinatura String?
+  ativo      Boolean @default(true)
 
-  created_at   DateTime @default(now())
-  updated_at   DateTime @updatedAt
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
-  ordens       OrdemServico[]
+  ordens OrdemServico[]
 }
 
 model OrdemServico {
-  id           String   @id @default(uuid())
+  id String @id @default(uuid())
 
-  clienteId    String
-  tecnicoId    String?
+  clienteId String
+  tecnicoId String?
 
-  status       String
-  prioridade   String?
-  descricao    String?
+  status     String
+  prioridade String?
+  descricao  String?
 
-  abertura     DateTime @default(now())
-  created_at   DateTime @default(now())
-  updated_at   DateTime @updatedAt
+  abertura   DateTime @default(now())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
-  cliente       Cliente       @relation(fields: [clienteId], references: [id])
-  tecnico       Tecnico?      @relation(fields: [tecnicoId], references: [id])
+  cliente Cliente  @relation(fields: [clienteId], references: [id])
+  tecnico Tecnico? @relation(fields: [tecnicoId], references: [id])
 
-  materiais     OSMaterial[]
-  evidencias    OSEvidencia[]
+  materiais  OSMaterial[]
+  evidencias OSEvidencia[]
 
   @@index([clienteId])
   @@index([tecnicoId])
 }
 
 model OSEvidencia {
-  id           String   @id @default(uuid())
+  id String @id @default(uuid())
 
-  osId         String
+  osId String
 
-  tipo         String
-  arquivo      String
-  descricao    String?
+  tipo      String
+  arquivo   String
+  descricao String?
 
-  latitude     Float?
-  longitude    Float?
+  latitude  Float?
+  longitude Float?
 
-  created_at   DateTime @default(now())
+  created_at DateTime @default(now())
 
-  ordem        OrdemServico @relation(fields: [osId], references: [id], onDelete: Cascade)
+  ordem OrdemServico @relation(fields: [osId], references: [id], onDelete: Cascade)
 
   @@index([osId])
 }
@@ -76,26 +76,23 @@ enum OsTipo {
 }
 
 model Cliente {
-  id          String   @id @default(uuid())
-  nome        String
-  cpfCnpj     String? 
-  telefone    String?
-  email       String?
-  endereco    String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(uuid())
+  nome      String
+  cpfCnpj   String?
+  telefone  String?
+  email     String?
+  endereco  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   ordensServico OrdemServico[]
 }
 
 model OSMaterial {
-  id              String @id @default(uuid())
-  ordemServicoId  String
-  nome            String
-  quantidade      Int @default(1)
+  id             String @id @default(uuid())
+  ordemServicoId String
+  nome           String
+  quantidade     Int    @default(1)
 
-  ordemServico    OrdemServico @relation(fields: [ordemServicoId], references: [id], onDelete: Cascade)
+  ordemServico OrdemServico @relation(fields: [ordemServicoId], references: [id], onDelete: Cascade)
 }
-
-
-
