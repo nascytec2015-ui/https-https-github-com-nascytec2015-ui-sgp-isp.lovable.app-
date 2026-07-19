@@ -66,7 +66,6 @@ type OS = {
   data_agendada: string | null;
   data_inicio: string | null;
   data_conclusao: string | null;
-  valor: number | null;
   forma_pagamento: string | null;
   assinatura_cliente: string | null;
   observacoes_cliente: string | null;
@@ -414,7 +413,6 @@ function OSPage() {
                     <TableCell className="text-sm">
                       {o.data_agendada ? new Date(o.data_agendada).toLocaleString("pt-BR") : "—"}
                     </TableCell>
-                    <TableCell>R$ {Number(o.valor ?? 0).toFixed(2)}</TableCell>
                     <TableCell className="text-right space-x-1">
                       <Button variant="ghost" size="icon" onClick={() => openEdit(o)}>
                         <Pencil className="h-4 w-4" />
