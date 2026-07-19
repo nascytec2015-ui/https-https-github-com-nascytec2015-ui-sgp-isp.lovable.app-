@@ -14,9 +14,7 @@
     "isolatedModules": true,
     "noEmit": true,
 
-    "types": [
-      "node"
-    ]
+    "types": ["node"]
   },
 
   "include": [
