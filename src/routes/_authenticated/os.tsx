@@ -74,7 +74,6 @@ type Material = {
   unidade: string;
 };
 
-
 type Evidencia = {
   id?: string;
   tipo: "foto" | "video";
@@ -609,7 +608,6 @@ const enderecoInputRef = useRef<HTMLInputElement>(null);
                   <TableHead>Tipo</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Agendada</TableHead>
-                  <TableHead>Valor</TableHead>
                   <TableHead className="text-right">Ações</TableHead>
                 </TableRow>
               </TableHeader>
@@ -858,40 +856,60 @@ const enderecoInputRef = useRef<HTMLInputElement>(null);
                           }}
                         />
                       </div>
-                      <div className="col-span-2">
-                        <Input
-                          type="number"
-                          step="0.01"
-                          placeholder="Qtd"
-                          value={m.quantidade}
-                          onChange={(e) => {
-                            const v = Number(e.target.value);
-                            setMateriais((arr) =>
-                              arr.map((x, j) => (j === i ? { ...x, quantidade: v } : x)),
-                            );
-                          }}
-                        />
+                      
+                      <div className="grid grid-cols-12 gap-2 items-end">
+
+                        <div className="col-span-6">
+                          <Input
+                            placeholder="Descrição"
+                            value={m.descricao}
+                          />
+                        </div>
+
+
+                        <div className="col-span-2">
+                          <Input
+                            type="number"
+                            placeholder="Qtd"
+                            value={m.quantidade}
+                          />
+                        </div>
+
+
+                        <div className="col-span-3">
+                          <Input
+                            placeholder="Unidade"
+                            value={m.unidade}
+                          />
+                        </div>
+
+
+                        <div className="col-span-1">
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                          >
+                            <Trash2 className="h-4 w-4 text-destructive" />
+                          </Button>
+                        </div>
+
                       </div>
-                      <div className="col-span-2">
-                        <Input
-                          placeholder="un"
-                          value={m.unidade}
-                          onChange={(e) => {
-                            const v = e.target.value;
-                            setMateriais((arr) =>
-                              arr.map((x, j) => (j === i ? { ...x, unidade: v } : x)),
-                            );
-                          }}
-                        />
-                      </div>
-              
                       <div className="col-span-1">
                         <Button
                           type="button"
                           variant="ghost"
                           size="icon"
-                          onClick={() => setMateriais((arr) => arr.filter((_, j) => j !== i))}
-                        >
+                          onClick={() =>
+ setMateriais((m) => [
+  ...m,
+  {
+    descricao:"",
+    quantidade:1,
+    unidade:"un"
+  },
+ ])
+}
                           <Trash2 className="h-4 w-4 text-destructive" />
                         </Button>
                       </div>
