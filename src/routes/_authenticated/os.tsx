@@ -498,7 +498,14 @@ const enderecoInputRef = useRef<HTMLInputElement>(null);
         if (error) throw error;
         osId = data.id as string;
       }
+      for (const evidencia of evidencias) {
 
+        await uploadEvidencia(
+          osId,
+          evidencia
+        );
+
+      }
       const mats = materiais.filter((m) => m.descricao.trim());
       if (mats.length > 0) {
         const { error: e2 } = await supabase
@@ -826,7 +833,7 @@ const enderecoInputRef = useRef<HTMLInputElement>(null);
                   onClick={() =>
                     setMateriais((m) => [
                       ...m,
-                      { descricao: "", quantidade: 1, unidade: "un", valor_unitario: 0 },
+                      { descricao: "", quantidade: 1, unidade: "un" },
                     ])
                   }
                 >
@@ -877,19 +884,7 @@ const enderecoInputRef = useRef<HTMLInputElement>(null);
                           }}
                         />
                       </div>
-                      <div className="col-span-2">
-                        <Input
-                          type="number"
-                          step="0.01"
-                          placeholder="R$ unit."
-                          onChange={(e) => {
-                            const v = Number(e.target.value);
-                            setMateriais((arr) =>
-                              arr.map((x, j) => (j === i ? { ...x, valor_unitario: v } : x)),
-                            );
-                          }}
-                        />
-                      </div>
+              
                       <div className="col-span-1">
                         <Button
                           type="button"
@@ -902,12 +897,142 @@ const enderecoInputRef = useRef<HTMLInputElement>(null);
                       </div>
                     </div>
                   ))}
-                  <div className="text-right text-sm text-muted-foreground">
-                    Total materiais:{" "}
-                                      </div>
                 </div>
-              )}
+
+            <div className="space-y-3 border rounded-lg p-4">
+
+              <Label>
+                Evidências do serviço
+              </Label>
+
+
+              <Input
+                type="file"
+                accept="image/*,video/*"
+                multiple
+
+                onChange={(e) => {
+
+                  const files =
+                    Array.from(e.target.files || []);
+
+
+                  setEvidencias((old) => [
+
+                    ...old,
+
+
+                    ...files.map(file => ({
+
+                      tipo:
+                        file.type.startsWith("video")
+                          ? "video"
+                          : "foto",
+
+                      arquivo: file,
+
+                      descricao: ""
+
+                    }))
+
+
+                  ]);
+
+                }}
+
+              />
+
+
+              {
+                evidencias.map((ev, index) => (
+
+                  <div
+                    key={index}
+                    className="flex gap-2 items-center border p-2 rounded"
+                  >
+
+
+                    <div className="flex-1">
+
+                      <p className="text-sm">
+
+                        {ev.tipo === "foto"
+                          ? "📷 Foto"
+                          : "🎥 Vídeo"}
+
+                        :
+                        {ev.arquivo?.name}
+
+                      </p>
+
+
+                      <Input
+
+                        placeholder="Descrição da evidência"
+
+                        value={ev.descricao}
+
+                        onChange={(e) => {
+
+                          const valor = e.target.value;
+
+
+                          setEvidencias(arr =>
+
+                            arr.map((x, i) =>
+
+                              i === index
+                                ?
+                                {
+                                  ...x,
+                                  descricao: valor
+                                }
+                                : x
+
+                            )
+
+                          )
+
+                        }}
+
+                      />
+
+                    </div>
+
+
+
+                    <Button
+
+                      type="button"
+
+                      variant="ghost"
+
+                      onClick={() => {
+
+                        setEvidencias(arr =>
+
+                          arr.filter((_, i) => i !== index)
+
+                        )
+
+                      }}
+
+                    >
+
+                      <X className="h-4 w-4" />
+
+                    </Button>
+
+
+                  </div>
+
+
+                ))
+
+              }
+
             </div>
+
 
             <div className="space-y-2">
               <Label htmlFor="assinatura_cliente">Assinatura / nome do recebedor</Label>
