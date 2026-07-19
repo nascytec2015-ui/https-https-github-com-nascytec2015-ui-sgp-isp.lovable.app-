@@ -1,52 +1,59 @@
 model Tecnico {
-  id          String   @id @default(uuid())
-  nome        String
-  telefone    String?
-  email       String?
-  cargo       String?
-  equipe      String?
-  foto        String?
-  assinatura  String?
-  ativo       Boolean @default(true)
+  id           String   @id @default(uuid())
+  nome         String
+  telefone     String?
+  email        String?
+  cargo        String?
+  equipe       String?
+  foto         String?
+  assinatura   String?
+  ativo        Boolean  @default(true)
 
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
 
-  ordens OrdemServico[]
+  ordens       OrdemServico[]
 }
 
 model OrdemServico {
-  id          String   @id @default(uuid())
-  clienteId   String
-  status      String
-  prioridade  String?
-  descricao   String?
-  abertura    DateTime @default(now())
+  id           String   @id @default(uuid())
 
-  cliente      Cliente  @relation(fields: [clienteId], references: [id])
-  materiais    OSMaterial[]
-  evidencias   OSEvidencia[]
+  clienteId    String
+  tecnicoId    String?
 
-  tecnicoId String?
-  tecnico   Tecnico? @relation(fields: [tecnicoId], references: [id])
+  status       String
+  prioridade   String?
+  descricao    String?
+
+  abertura     DateTime @default(now())
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  cliente       Cliente       @relation(fields: [clienteId], references: [id])
+  tecnico       Tecnico?      @relation(fields: [tecnicoId], references: [id])
+
+  materiais     OSMaterial[]
+  evidencias    OSEvidencia[]
+
+  @@index([clienteId])
+  @@index([tecnicoId])
 }
 
 model OSEvidencia {
-  id          String   @id @default(uuid())
+  id           String   @id @default(uuid())
 
-  osId        String
+  osId         String
 
-  tipo        String
+  tipo         String
+  arquivo      String
+  descricao    String?
 
-  arquivo     String
+  latitude     Float?
+  longitude    Float?
 
-  descricao   String?
+  created_at   DateTime @default(now())
 
-  latitude    Float?
+  ordem        OrdemServico @relation(fields: [osId], references: [id], onDelete: Cascade)
 
-  longitude   Float?
-
-  created_at  DateTime @default(now())
-
-  ordem OrdemServico @relation(fields: [osId], references: [id])
+  @@index([osId])
 }
