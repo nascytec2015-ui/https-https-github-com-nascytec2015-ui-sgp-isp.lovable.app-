@@ -1,0 +1,59 @@
+model Tecnico {
+  id           String   @id @default(uuid())
+  nome         String
+  telefone     String?
+  email        String?
+  cargo        String?
+  equipe       String?
+  foto         String?
+  assinatura   String?
+  ativo        Boolean  @default(true)
+
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  ordens       OrdemServico[]
+}
+
+model OrdemServico {
+  id           String   @id @default(uuid())
+
+  clienteId    String
+  tecnicoId    String?
+
+  status       String
+  prioridade   String?
+  descricao    String?
+
+  abertura     DateTime @default(now())
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  cliente       Cliente       @relation(fields: [clienteId], references: [id])
+  tecnico       Tecnico?      @relation(fields: [tecnicoId], references: [id])
+
+  materiais     OSMaterial[]
+  evidencias    OSEvidencia[]
+
+  @@index([clienteId])
+  @@index([tecnicoId])
+}
+
+model OSEvidencia {
+  id           String   @id @default(uuid())
+
+  osId         String
+
+  tipo         String
+  arquivo      String
+  descricao    String?
+
+  latitude     Float?
+  longitude    Float?
+
+  created_at   DateTime @default(now())
+
+  ordem        OrdemServico @relation(fields: [osId], references: [id], onDelete: Cascade)
+
+  @@index([osId])
+}
