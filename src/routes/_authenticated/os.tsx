@@ -50,7 +50,6 @@ type Material = {
   descricao: string;
   quantidade: number;
   unidade: string;
-  valor_unitario: number;
 };
 
 type OS = {
@@ -336,8 +335,6 @@ function OSPage() {
     const matchS = statusFilter === "todos" || o.status === statusFilter;
     return matchT && matchS;
   });
-
-  const totalMat = materiais.reduce((s, m) => s + m.quantidade * m.valor_unitario, 0);
 
   return (
     <div className="space-y-6">
@@ -682,7 +679,6 @@ function OSPage() {
                           type="number"
                           step="0.01"
                           placeholder="R$ unit."
-                          value={m.valor_unitario}
                           onChange={(e) => {
                             const v = Number(e.target.value);
                             setMateriais((arr) =>
@@ -705,8 +701,7 @@ function OSPage() {
                   ))}
                   <div className="text-right text-sm text-muted-foreground">
                     Total materiais:{" "}
-                    <span className="font-medium text-foreground">R$ {totalMat.toFixed(2)}</span>
-                  </div>
+                                      </div>
                 </div>
               )}
             </div>
