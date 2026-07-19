@@ -103,7 +103,7 @@ const STATUS_VARIANT: Record<OSStatus, "default" | "secondary" | "destructive" |
 const osSchema = z.object({
   cliente_id: z.string().uuid("Selecione um cliente"),
   tipo: z.enum(["instalacao", "manutencao", "mudanca_endereco", "visita_tecnica"]),
-  status: z.enum(["aberta", "agendada", "em_andamento", "concluida", "cancelada"]),
+  status: z.enum(["aberta", "agendada", "em_execucao", "em deslocamento", "aguardando material", "concluida", "cancelada"]),
   descricao: z.string().trim().min(3, "Descreva o serviço").max(2000),
   tecnico_id: z.string().uuid().nullable(),
   cto_ref: z.string().max(80).nullable(),
@@ -112,8 +112,6 @@ const osSchema = z.object({
   data_agendada: z.string().nullable(),
   data_inicio: z.string().nullable(),
   data_conclusao: z.string().nullable(),
-  valor: z.number().min(0).max(99999),
-  forma_pagamento: z.string().max(60).nullable(),
   assinatura_cliente: z.string().max(120).nullable(),
   observacoes_cliente: z.string().max(1000).nullable(),
   observacoes_internas: z.string().max(1000).nullable(),
