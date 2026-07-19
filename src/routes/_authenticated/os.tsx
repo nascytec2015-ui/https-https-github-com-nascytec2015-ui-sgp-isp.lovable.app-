@@ -822,8 +822,10 @@ const enderecoInputRef = useRef<HTMLInputElement>(null);
 
             {/* Materiais */}
             <div className="space-y-2 border rounded-lg p-3">
+
               <div className="flex items-center justify-between">
                 <Label>Equipamentos / materiais usados</Label>
+
                 <Button
                   type="button"
                   size="sm"
@@ -831,92 +833,107 @@ const enderecoInputRef = useRef<HTMLInputElement>(null);
                   onClick={() =>
                     setMateriais((m) => [
                       ...m,
-                      { descricao: "", quantidade: 1, unidade: "un" },
+                      {
+                        descricao: "",
+                        quantidade: 1,
+                        unidade: "un"
+                      },
                     ])
                   }
                 >
-                  <Plus className="h-3 w-3 mr-1" /> Adicionar
+                  <Plus className="h-3 w-3 mr-1" />
+                  Adicionar
                 </Button>
               </div>
-              {materiais.length === 0 ? (
-                <p className="text-sm text-muted-foreground py-2">Nenhum material adicionado</p>
-              ) : (
-                <div className="space-y-2">
-                  {materiais.map((m, i) => (
-                    <div key={i} className="grid grid-cols-12 gap-2 items-end">
-                      <div className="col-span-5">
-                        <Input
-                          placeholder="Descrição"
-                          value={m.descricao}
-                          onChange={(e) => {
-                            const v = e.target.value;
-                            setMateriais((arr) =>
-                              arr.map((x, j) => (j === i ? { ...x, descricao: v } : x)),
-                            );
-                          }}
-                        />
-                      </div>
-                      
-                      <div className="grid grid-cols-12 gap-2 items-end">
-
-                        <div className="col-span-6">
-                          <Input
-                            placeholder="Descrição"
-                            value={m.descricao}
-                          />
-                        </div>
 
 
-                        <div className="col-span-2">
-                          <Input
-                            type="number"
-                            placeholder="Qtd"
-                            value={m.quantidade}
-                          />
-                        </div>
+              {materiais.map((m, i) => (
+
+                <div
+                  key={i}
+                  className="grid grid-cols-12 gap-2 items-center"
+                >
+
+                  <Input
+                    className="col-span-6"
+                    placeholder="Descrição"
+                    value={m.descricao}
+                    onChange={(e) => {
+
+                      const valor = e.target.value;
+
+                      setMateriais(arr =>
+                        arr.map((x, j) =>
+                          j === i
+                            ? { ...x, descricao: valor }
+                            : x
+                        )
+                      );
+
+                    }}
+                  />
 
 
-                        <div className="col-span-3">
-                          <Input
-                            placeholder="Unidade"
-                            value={m.unidade}
-                          />
-                        </div>
+                  <Input
+                    className="col-span-2"
+                    type="number"
+                    value={m.quantidade}
+                    onChange={(e) => {
+
+                      const valor = Number(e.target.value);
+
+                      setMateriais(arr =>
+                        arr.map((x, j) =>
+                          j === i
+                            ? { ...x, quantidade: valor }
+                            : x
+                        )
+                      );
+
+                    }}
+                  />
 
 
-                        <div className="col-span-1">
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon"
-                          >
-                            <Trash2 className="h-4 w-4 text-destructive" />
-                          </Button>
-                        </div>
+                  <Input
+                    className="col-span-3"
+                    value={m.unidade}
+                    onChange={(e) => {
 
-                      </div>
-                      <div className="col-span-1">
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon"
-                          onClick={() =>
- setMateriais((m) => [
-  ...m,
-  {
-    descricao:"",
-    quantidade:1,
-    unidade:"un"
-  },
- ])
-}
-                          <Trash2 className="h-4 w-4 text-destructive" />
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
+                      const valor = e.target.value;
+
+                      setMateriais(arr =>
+                        arr.map((x, j) =>
+                          j === i
+                            ? { ...x, unidade: valor }
+                            : x
+                        )
+                      );
+
+                    }}
+                  />
+
+
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => {
+
+                      setMateriais(arr =>
+                        arr.filter((_, j) => j !== i)
+                      );
+
+                    }}
+                  >
+                    <Trash2 className="h-4 w-4 text-destructive" />
+                  </Button>
+
+
                 </div>
 
+              ))}
+
+            </div>
             <div className="space-y-3 border rounded-lg p-4">
 
               <Label>
