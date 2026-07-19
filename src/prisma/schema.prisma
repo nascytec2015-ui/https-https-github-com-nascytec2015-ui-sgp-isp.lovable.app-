@@ -75,4 +75,27 @@ enum OsTipo {
   CANCELAMENTO
 }
 
+model Cliente {
+  id          String   @id @default(uuid())
+  nome        String
+  cpfCnpj     String? 
+  telefone    String?
+  email       String?
+  endereco    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  ordensServico OrdemServico[]
+}
+
+model OSMaterial {
+  id              String @id @default(uuid())
+  ordemServicoId  String
+  nome            String
+  quantidade      Int @default(1)
+
+  ordemServico    OrdemServico @relation(fields: [ordemServicoId], references: [id], onDelete: Cascade)
+}
+
+
 
