@@ -47,7 +47,7 @@ type OSStatus =
   | "aberta"
   | "agendada"
   | "em_deslocamento"
-  | ""
+  | "em_andamento"
   | "aguardando_material"
   | "concluida"
   | "cancelada";
