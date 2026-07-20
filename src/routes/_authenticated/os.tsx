@@ -178,9 +178,6 @@ type OS = {
 
 };
 
-
-
-
 const TIPO_LABEL: Record<OSTipo, string> = {
 
   instalacao:
@@ -309,7 +306,6 @@ const osSchema = z.object({
       .max(80)
       .nullable(),
 
-
   porta_cto:
     z.number()
       .int()
@@ -317,39 +313,32 @@ const osSchema = z.object({
       .max(999)
       .nullable(),
 
-
   endereco_atendimento:
     z.string()
       .max(300)
       .nullable(),
 
-
   data_agendada:
     z.string()
       .nullable(),
-
 
   data_inicio:
     z.string()
       .nullable(),
 
-
   data_conclusao:
     z.string()
       .nullable(),
-
 
   assinatura_cliente:
     z.string()
       .max(120)
       .nullable(),
 
-
   observacoes_cliente:
     z.string()
       .max(1000)
       .nullable(),
-
 
   observacoes_internas:
     z.string()
@@ -357,9 +346,6 @@ const osSchema = z.object({
       .nullable(),
 
 });
-
-
-
 
 function toDtLocal(
   v: string | null | undefined
@@ -390,14 +376,10 @@ function OSPage() {
 
     if (!evidencia.arquivo)
       return;
-
-
     const arquivo = evidencia.arquivo;
-
 
     const nomeArquivo =
       `${osId}/${Date.now()}-${arquivo.name}`;
-
 
     const { error: uploadError } =
       await supabase
@@ -408,19 +390,14 @@ function OSPage() {
           arquivo
         );
 
-
     if (uploadError)
       throw uploadError;
-
-
 
     const { data: urlData } =
       supabase
         .storage
         .from("os-evidencias")
         .getPublicUrl(nomeArquivo);
-
-
 
     const { error: dbError } =
       await supabase
@@ -438,8 +415,6 @@ function OSPage() {
             evidencia.descricao || ""
 
         });
-
-
 
     if (dbError)
       throw dbError;
