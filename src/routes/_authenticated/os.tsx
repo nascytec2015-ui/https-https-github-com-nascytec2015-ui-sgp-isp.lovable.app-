@@ -1419,22 +1419,16 @@ function OSPage() {
                   -translate-y-1/2
                   h-4
                   w-4
-                  text-muted-foreground
-                "
+                  text-muted-foreground"
               />
-
-
-
               <Input
 
                 className="
-                  pl-9
-                "
+                  pl-9"
 
                 placeholder="
                   Buscar número,
-                  cliente ou descrição...
-                "
+                  cliente ou descrição..."
 
                 value={filter}
 
@@ -1445,24 +1439,21 @@ function OSPage() {
                 }
 
               />
-
-
-            </div>
+</div>
 
 
 
 
-            <select
-
-              value={statusFilter}
-
-              onChange={(e)=>
-                setStatusFilter(
-                  e.target.value
-                  as OSStatus | "todos"
-                )
-              }
-
+          <select
+  value={statusFilter}
+  onChange={(e) =>
+    setStatusFilter(e.target.value as OSStatus | "todos")
+  }
+  className="h-10 
+    rounded-md
+    border
+    px-3
+    text-sm">  
               className="
                 h-10
                 rounded-md
@@ -1704,21 +1695,7 @@ function OSPage() {
                             "—"
                           }
 
-
                         </TableCell>
-id="final-os-parte"
-                          {
-                            o.data_agendada
-                            ?
-                            new Date(
-                              o.data_agendada
-                            ).toLocaleString("pt-BR")
-                            :
-                            "—"
-                          }
-
-                        </TableCell>
-
 
                         <TableCell
                           className="
