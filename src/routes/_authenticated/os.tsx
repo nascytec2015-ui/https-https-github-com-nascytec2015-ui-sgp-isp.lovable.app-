@@ -57,17 +57,19 @@ const TIPO_LABEL: Record<OSTipo, string> = {
   mudanca_endereco: "Mudança_endereço",
   visita_tecnica: "Visita_técnica",
   outros: "Outros",
+  reparo: "",
+  desativacao: ""
 };
 
 const STATUS_LABEL: Record<OSStatus, string> = {
-  
-  agendada: "Agendada", 
+  agendada: "Agendada",
   aberta: "Aberta",
   em_execucao: "Em_execução",
   em_deslocamento: "Em_deslocamento",
   aguardando_material: "Aguardando_material",
   concluida: "Concluída",
   cancelada: "Cancelada",
+  em_atendimento: ""
 };
 
 const STATUS_VARIANT: Record<OSStatus, "default" | "secondary" | "destructive" | "outline"> = {
@@ -78,6 +80,7 @@ const STATUS_VARIANT: Record<OSStatus, "default" | "secondary" | "destructive" |
   aguardando_material: "default",
   concluida: "secondary",
   cancelada: "destructive",
+  em_atendimento: "default"
 };
 
 const osSchema = z.object({
