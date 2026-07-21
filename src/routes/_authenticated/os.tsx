@@ -1616,22 +1616,14 @@ function OSPage() {
                   "
 
                 >
-
                   {
-                    (
-                      Object.keys(
-                        TIPO_LABEL
-                      )
-                      as OSTipo[]
-                    )
-                    .map(t=>(
-
+                    Object.keys(TIPO_LABEL).map((t) => (
                       <option
                         key={t}
-                        value={t}
+                        value={t as OSTipo}
                       >
 
-                        {TIPO_LABEL[t]}
+                        {TIPO_LABEL[t as OSTipo]}
 
                       </option>
 
@@ -1671,20 +1663,13 @@ function OSPage() {
                 >
 
                   {
-                    (
-                      Object.keys(
-                        STATUS_LABEL
-                      )
-                      as OSStatus[]
-                    )
-                    .map(s=>(
-
+                    Object.keys(STATUS_LABEL).map((s) => (
                       <option
                         key={s}
-                        value={s}
+                        value={s as OSStatus}
                       >
 
-                        {STATUS_LABEL[s]}
+                        {STATUS_LABEL[s as OSStatus]}
 
                       </option>
 
