@@ -176,7 +176,7 @@ const osSchema = z.object({
 
   status:
     z.enum([
-      "agendada"
+      "agendada",
       "aberta",
       "em_execucao",
       "em_deslocamento",
