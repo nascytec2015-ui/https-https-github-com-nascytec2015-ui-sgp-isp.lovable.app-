@@ -822,10 +822,8 @@ function OSPage() {
               tipo:
                 form.get("tipo"),
 
-
               status:
                 form.get("status"),
-
 
               descricao:
                 form.get("descricao"),
@@ -836,13 +834,11 @@ function OSPage() {
                 ) ||
                 null,
 
-
               cto_ref:
                 String(
                   form.get("cto_ref") ?? ""
                 ) ||
                 null,
-
 
               porta_cto:
                 form.get("porta_cto")
@@ -853,13 +849,11 @@ function OSPage() {
                   :
                   null,
 
-
               endereco_atendimento:
                 String(
                   form.get("endereco_atendimento") ?? ""
                 ) ||
                 null,
-
 
               data_agendada:
                 String(
@@ -867,13 +861,11 @@ function OSPage() {
                 ) ||
                 null,
 
-
               data_inicio:
                 String(
                   form.get("data_inicio") ?? ""
                 ) ||
                 null,
-
 
               data_conclusao:
                 String(
@@ -881,13 +873,11 @@ function OSPage() {
                 ) ||
                 null,
 
-
               assinatura_cliente:
                 String(
                   form.get("assinatura_cliente") ?? ""
                 ) ||
                 null,
-
 
               observacoes_cliente:
                 String(
@@ -895,14 +885,11 @@ function OSPage() {
                 ) ||
                 null,
 
-
               observacoes_internas:
                 String(
                   form.get("observacoes_internas") ?? ""
                 ) ||
                 null,
-
-
             });
 
           const payload = {
