@@ -13,7 +13,7 @@ import {
 import { z } from "zod";
 
 import { supabase } from "@/integrations/supabase/client";
-import type { Database } from "@/integrations/supabase/database.types";
+import type { Database } from "@/integrations/supabase/types";
 import { useAuth } from "@/lib/auth-context";
 
 import { Button } from "@/components/ui/button";
