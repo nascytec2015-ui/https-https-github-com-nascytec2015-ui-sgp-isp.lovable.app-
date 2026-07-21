@@ -585,12 +585,6 @@ function OSPage() {
 
   }, [clienteData]);
 
-
-
-
-
-
-
   const {
     data: ordens = [],
     isLoading
@@ -600,7 +594,6 @@ function OSPage() {
       queryKey: [
         "ordens_servico"
       ],
-
 
       queryFn:
         async () => {
@@ -626,23 +619,13 @@ function OSPage() {
               );
 
 
-
           if (error)
             throw error;
-
-
-
           return data as unknown as OS[];
 
         }
 
     });
-
-
-
-
-
-
 
   const {
     data: clientes = []
@@ -652,7 +635,6 @@ function OSPage() {
       queryKey: [
         "clientes-min"
       ],
-
 
       queryFn:
         async () => {
@@ -671,12 +653,8 @@ function OSPage() {
                 "nome"
               );
 
-
-
           if (error)
             throw error;
-
-
 
           return data as {
             id: string;
@@ -687,11 +665,6 @@ function OSPage() {
 
     });
 
-
-
-
-
-
   const {
     data: tecnicos = []
   } =
@@ -700,7 +673,6 @@ function OSPage() {
       queryKey: [
         "tecnicos"
       ],
-
 
       queryFn:
         async () => {
@@ -720,20 +692,14 @@ function OSPage() {
                 "tecnico"
               );
 
-
-
           if (error)
             throw error;
-
-
 
           return (data ?? [])
             .map((r: any) => ({
 
               id:
                 r.user_id,
-
-
               nome:
                 r.profiles?.full_name ||
                 "Técnico"
@@ -743,12 +709,6 @@ function OSPage() {
         }
 
     });
-
-
-
-
-
-
 
   const {
     data: materiaisEdit = []
@@ -760,14 +720,11 @@ function OSPage() {
         editing?.id
       ],
 
-
       enabled:
         !!editing?.id,
 
-
       queryFn:
         async () => {
-
 
           const {
             data,
@@ -781,23 +738,14 @@ function OSPage() {
                 editing!.id
               );
 
-
-
           if (error)
             throw error;
-
-
 
           return data as Material[];
 
         }
 
     });
-
-
-
-
-
 
   function openNew() {
 
@@ -816,11 +764,6 @@ function OSPage() {
 
   }
 
-
-
-
-
-
   function openEdit(o: OS) {
 
 
@@ -834,23 +777,15 @@ function OSPage() {
       o.cliente_id
     );
 
-
     setEnderecoPreenchido(
       o.endereco_atendimento || ""
     );
-
 
     setOpen(true);
 
   }
 
-
-
-
-
-
   useEffect(() => {
-
 
     if (
       editing?.id &&
@@ -864,25 +799,17 @@ function OSPage() {
 
     }
 
-
   }, [
     editing?.id,
     materiaisEdit,
     materiais.length
   ]);
 
-
-
-
-
-
-
   const save =
     useMutation({
 
       mutationFn:
         async (form: FormData) => {
-
 
           const parsed =
             osSchema.parse({
@@ -891,7 +818,6 @@ function OSPage() {
                 String(
                   form.get("cliente_id") ?? ""
                 ),
-
 
               tipo:
                 form.get("tipo"),
@@ -903,7 +829,6 @@ function OSPage() {
 
               descricao:
                 form.get("descricao"),
-
 
               tecnico_id:
                 String(
@@ -980,15 +905,8 @@ function OSPage() {
 
             });
 
-
-
-
-
           const payload = {
-
-
             ...parsed,
-
 
             data_agendada:
               parsed.data_agendada
@@ -999,8 +917,6 @@ function OSPage() {
                 :
                 null,
 
-
-
             data_inicio:
               parsed.data_inicio
                 ?
@@ -1009,8 +925,6 @@ function OSPage() {
                 ).toISOString()
                 :
                 null,
-
-
 
             data_conclusao:
               parsed.data_conclusao
@@ -1021,19 +935,11 @@ function OSPage() {
                 :
                 null,
 
-
           };
-
-
-
 
           let osId: string;
 
-
-
-
           if (editing) {
-
 
             const {
               error
@@ -1046,17 +952,11 @@ function OSPage() {
                   editing.id
                 );
 
-
-
             if (error)
               throw error;
 
-
-
             osId =
               editing.id;
-
-
 
             await supabase
               .from("os_materiais")
@@ -1066,19 +966,14 @@ function OSPage() {
                 osId
               );
 
-
           }
 
           else {
-
 
             const {
               data: u
             } =
               await supabase.auth.getUser();
-
-
-
 
             const {
               data,
@@ -1098,22 +993,13 @@ function OSPage() {
                 .select("id")
                 .single();
 
-
-
-
             if (error)
               throw error;
-
-
 
             osId =
               data.id;
 
           }
-
-
-
-
 
           for (
             const evidencia
@@ -1127,20 +1013,13 @@ function OSPage() {
 
           }
 
-
-
-
           const mats =
             materiais.filter(
               m =>
                 m.descricao.trim()
             );
 
-
-
           if (mats.length) {
-
-
             const {
               error
             } =
@@ -1157,19 +1036,14 @@ function OSPage() {
 
                 );
 
-
-
             if (error)
               throw error;
 
           }
 
-
         },
 
-
       onSuccess: () => {
-
 
         toast.success(
           editing
@@ -1179,15 +1053,11 @@ function OSPage() {
             "OS criada"
         );
 
-
-
         qc.invalidateQueries({
           queryKey: [
             "ordens_servico"
           ]
         });
-
-
 
         setOpen(false);
 
@@ -1200,7 +1070,6 @@ function OSPage() {
 
       },
 
-
       onError: (e: Error) => {
 
         toast.error(
@@ -1208,7 +1077,6 @@ function OSPage() {
         );
 
       }
-
 
     });
   const remove =
@@ -1229,15 +1097,12 @@ function OSPage() {
                 id
               );
 
-
           if (error)
             throw error;
 
         },
 
-
       onSuccess: () => {
-
 
         toast.success(
           "OS removida"
@@ -1252,36 +1117,21 @@ function OSPage() {
 
         });
 
-
       },
 
-
       onError: (e: Error) => {
-
-
         toast.error(
           e.message
         );
 
-
       }
-
 
     });
 
-
-
-
-
   const filtered =
     ordens.filter((o) => {
-
-
       const t =
         filter.toLowerCase();
-
-
-
       const matchText =
         !t ||
         String(o.numero)
@@ -1295,13 +1145,9 @@ function OSPage() {
           ?.toLowerCase()
           .includes(t);
 
-
-
       const matchStatus =
         statusFilter === "todos" ||
         o.status === statusFilter;
-
-
 
       return (
         matchText &&
@@ -1310,16 +1156,9 @@ function OSPage() {
 
     });
 
-
-
-
-
-
   return (
 
     <div className="space-y-6">
-
-
       <div className="
         flex
         items-center
@@ -1327,10 +1166,7 @@ function OSPage() {
         flex-wrap
         gap-3
       ">
-
-
         <div>
-
 
           <h1 className="
             text-3xl
@@ -1339,8 +1175,6 @@ function OSPage() {
           ">
             Ordens de Serviço
           </h1>
-
-
 
           <p className="
             text-muted-foreground
@@ -1351,8 +1185,6 @@ function OSPage() {
 
 
         </div>
-
-
 
 
         {
@@ -1380,18 +1212,11 @@ function OSPage() {
 
       </div>
 
-
-
-
-
-
       <Card>
-
 
         <CardContent
           className="p-4 space-y-4"
         >
-
 
           <div
             className="
@@ -1401,7 +1226,6 @@ function OSPage() {
             "
           >
 
-
             <div
               className="
                 relative
@@ -1409,7 +1233,6 @@ function OSPage() {
                 min-w-[200px]
               "
             >
-
 
               <Search
                 className="
@@ -1441,35 +1264,21 @@ function OSPage() {
               />
 </div>
 
-
-
-
-          <select
+  <select
   value={statusFilter}
   onChange={(e) =>
     setStatusFilter(e.target.value as OSStatus | "todos")
   }
-  className="h-10 
+  className="
+    h-10 
     rounded-md
     border
     px-3
     text-sm">  
-              className="
-                h-10
-                rounded-md
-                border
-                px-3
-                text-sm
-              "
-
-            >
-
-
+             
               <option value="todos">
                 Todos os status
               </option>
-
-
 
               {
                 (
@@ -1490,17 +1299,10 @@ function OSPage() {
                 ))
               }
 
-
             </select>
 
 
           </div>
-
-
-
-
-
-
 
           {
             isLoading ?
@@ -1515,9 +1317,7 @@ function OSPage() {
                 Carregando...
               </div>
 
-            )
-
-            :
+            ):
 
             filtered.length===0 ?
 
@@ -1543,9 +1343,7 @@ function OSPage() {
 
               </div>
 
-            )
-
-            :
+            ):
 
             (
 
@@ -1597,14 +1395,7 @@ function OSPage() {
 
                 </TableHeader>
 
-
-
-
-
-
                 <TableBody>
-
-
                   {
                     filtered.map((o)=>(
 
@@ -1612,7 +1403,6 @@ function OSPage() {
                       <TableRow
                         key={o.id}
                       >
-
 
                         <TableCell
                           className="
@@ -1623,8 +1413,6 @@ function OSPage() {
                           #{o.numero}
 
                         </TableCell>
-
-
 
                         <TableCell
                           className="
@@ -1640,8 +1428,6 @@ function OSPage() {
 
                         </TableCell>
 
-
-
                         <TableCell>
 
                           {
@@ -1649,12 +1435,7 @@ function OSPage() {
                           }
 
                         </TableCell>
-
-
-
                         <TableCell>
-
-
                           <Badge
                             variant={
                               STATUS_VARIANT[o.status]
@@ -1667,11 +1448,7 @@ function OSPage() {
 
                           </Badge>
 
-
                         </TableCell>
-
-
-
                         <TableCell
                           className="
                             text-sm
@@ -1703,8 +1480,6 @@ function OSPage() {
                             space-x-1
                           "
                         >
-
-
                           <Button
                             variant="ghost"
                             size="icon"
@@ -1766,8 +1541,6 @@ function OSPage() {
 
 
                         </TableCell>
-
-
                       </TableRow>
 
 
@@ -1776,8 +1549,6 @@ function OSPage() {
 
 
                 </TableBody>
-
-
               </Table>
 
 
@@ -1787,21 +1558,11 @@ function OSPage() {
 
 
         </CardContent>
-
-
       </Card>
-
-
-
-
-
       <Dialog
 
         open={open}
-
         onOpenChange={(v)=>{
-
-
           setOpen(v);
 
 
@@ -1809,22 +1570,16 @@ function OSPage() {
           if(!v){
 
             setEditing(null);
-
             setMateriais([]);
-
             setEvidencias([]);
-
             setSelectedClientId("");
-
             setEnderecoPreenchido("");
 
           }
 
-
         }}
 
       >
-
 
         <DialogContent
           className="
@@ -1834,10 +1589,7 @@ function OSPage() {
           "
         >
 
-
-
           <DialogHeader>
-
             <DialogTitle>
 
               {
@@ -1849,13 +1601,7 @@ function OSPage() {
               }
 
             </DialogTitle>
-
-
           </DialogHeader>
-
-
-
-
 
           <form
 
@@ -1876,11 +1622,6 @@ function OSPage() {
             "
 
           >
-
-
-
-
-
             <div
               className="
                 grid
@@ -1889,8 +1630,6 @@ function OSPage() {
                 gap-3
               "
             >
-
-
               <div
                 className="
                   space-y-2
@@ -1900,7 +1639,6 @@ function OSPage() {
                 <Label>
                   Cliente *
                 </Label>
-
 
                 <select
 
@@ -1930,8 +1668,6 @@ function OSPage() {
                     Selecione...
                   </option>
 
-
-
                   {
                     clientes.map(c=>(
 
@@ -1952,10 +1688,6 @@ function OSPage() {
 
 
               </div>
-
-
-
-
 
               <div className="space-y-2">
 
@@ -2010,10 +1742,6 @@ function OSPage() {
 
               </div>
 
-
-
-
-
               <div className="space-y-2">
 
 
@@ -2062,16 +1790,8 @@ function OSPage() {
                     ))
                   }
 
-
                 </select>
-
-
               </div>
-
-
-
-
-
 
               <div className="space-y-2">
 
@@ -2104,7 +1824,6 @@ function OSPage() {
                     Não atribuído
                   </option>
 
-
                   {
                     tecnicos.map(t=>(
 
@@ -2122,25 +1841,14 @@ function OSPage() {
 
 
                 </select>
-
-
               </div>
 
-
-
             </div>
-
-
-
-
-
             <div className="space-y-2">
 
               <Label>
                 Descrição *
               </Label>
-
-
               <Textarea
 
                 name="descricao"
@@ -2155,21 +1863,13 @@ function OSPage() {
                 required
 
               />
-
-
             </div>
-
-
-
-
 
             <div className="space-y-2">
 
               <Label>
                 Endereço atendimento
               </Label>
-
-
               <Input
 
                 ref={enderecoInputRef}
@@ -2470,10 +2170,6 @@ function OSPage() {
 
                     />
 
-
-
-
-
                     <Input
 
                       className="
@@ -2553,13 +2249,7 @@ function OSPage() {
                 ))
               }
 
-
             </div>
-
-
-
-
-
 
             <div
               className="
@@ -2570,14 +2260,9 @@ function OSPage() {
               "
             >
 
-
               <Label>
                 Evidências do serviço
               </Label>
-
-
-
-
 
               <Input
 
@@ -2589,38 +2274,26 @@ function OSPage() {
 
                 onChange={(e)=>{
 
-
                   const files =
                     Array.from(
                       e.target.files || []
                     );
 
-
-
                   setEvidencias(old=>[
 
-
                     ...old,
-
-
                     ...files.map(file=>({
-
                       tipo:
                         file.type.startsWith("video")
                         ?
                         "video"
                         :
                         "foto",
-
-
                       arquivo:
                         file,
-
-
                       descricao:""
 
                     }))
-
 
                   ]);
 
@@ -2629,15 +2302,8 @@ function OSPage() {
 
               />
 
-
-
-
-
-
-
               {
                 evidencias.map((ev,index)=>(
-
 
                   <div
 
@@ -2654,13 +2320,11 @@ function OSPage() {
 
                   >
 
-
                     <div
                       className="
                         flex-1
                       "
                     >
-
 
                       <p
                         className="
@@ -2684,30 +2348,19 @@ function OSPage() {
 
                       </p>
 
-
-
-
-
                       <Input
 
                         placeholder="
                           Descrição da evidência
                         "
-
                         value={
                           ev.descricao
                         }
 
-
                         onChange={(e)=>{
-
-
                           setEvidencias(arr=>
-
-
                             arr.map((x,i)=>
-
-                              i===index
+                             i===index
 
                               ?
 
@@ -2731,12 +2384,7 @@ function OSPage() {
 
                       />
 
-
                     </div>
-
-
-
-
 
                     <Button
 
@@ -2760,7 +2408,6 @@ function OSPage() {
 
                     >
 
-
                       <X
                         className="
                           h-4
@@ -2771,31 +2418,17 @@ function OSPage() {
 
                     </Button>
 
-
-
                   </div>
-
 
                 ))
               }
 
-
-
             </div>
-
-
-
-
-
-
-
             <div className="space-y-2">
 
               <Label>
                 Assinatura / nome do recebedor
               </Label>
-
-
               <Input
 
                 name="assinatura_cliente"
@@ -2811,13 +2444,6 @@ function OSPage() {
               />
 
             </div>
-
-
-
-
-
-
-
             <div
               className="
                 grid
@@ -2825,8 +2451,6 @@ function OSPage() {
                 gap-3
               "
             >
-
-
               <div
                 className="
                   space-y-2
@@ -2836,8 +2460,6 @@ function OSPage() {
                 <Label>
                   Observações do cliente
                 </Label>
-
-
                 <Textarea
 
                   name="observacoes_cliente"
@@ -2851,11 +2473,6 @@ function OSPage() {
                 />
 
               </div>
-
-
-
-
-
               <div
                 className="
                   space-y-2
@@ -2878,22 +2495,10 @@ function OSPage() {
                   rows={3}
 
                 />
-
-
               </div>
-
-
             </div>
 
-
-
-
-
-
-
             <DialogFooter>
-
-
               <Button
 
                 type="submit"
@@ -2901,10 +2506,7 @@ function OSPage() {
                 disabled={
                   save.isPending
                 }
-
-              >
-
-
+>
                 {
                   save.isPending
                   ?
@@ -2915,28 +2517,15 @@ function OSPage() {
 
 
               </Button>
-
-
-
             </DialogFooter>
-
-
-
-
 
           </form>
 
-
-
         </DialogContent>
-
-
       </Dialog>
 
 
     </div >
-
   );
-
 
 }
