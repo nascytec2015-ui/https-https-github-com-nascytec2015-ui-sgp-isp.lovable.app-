@@ -125,19 +125,12 @@ type OS = {
 };
 
 const TIPO_LABEL: Record<OSTipo, string> = {
-
-  instalacao:
-    "Instalação",
-
-  manutencao:
-    "Manutenção/Reparo",
-
-  mudanca_endereco:
-    "Mudança de endereço",
-
-  visita_tecnica:
-    "Visita técnica",
-
+  instalacao: "Instalação",
+  reparo: "Reparo",
+  manutencao: "Manutenção",
+  mudanca_endereco: "Mudança de endereço",
+  desativacao: "Desativação",
+  outros: "Outros",
 };
 
 const STATUS_LABEL: Record<OSStatus, string> = {
@@ -2149,7 +2142,7 @@ function OSPage() {
                       descricao: ""
                     }
                   ]);
-                  
+
                 }}
 
               />
