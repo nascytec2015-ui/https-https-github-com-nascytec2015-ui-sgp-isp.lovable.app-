@@ -58,8 +58,11 @@ const TIPO_LABEL: Record<OSTipo, string> = {
   visita_tecnica: "Visita_técnica",
   outros: "Outros",
 <<<<<<< HEAD
+<<<<<<< HEAD
   reparo: "",
   desativacao: ""
+=======
+>>>>>>> 800509275a39df1cba6f9ba95f92e8ec5b86120e
 =======
 >>>>>>> 800509275a39df1cba6f9ba95f92e8ec5b86120e
 };
