@@ -57,8 +57,11 @@ const TIPO_LABEL: Record<OSTipo, string> = {
   mudanca_endereco: "Mudança de endereço",
   visita_tecnica: "Visita_técnica",
   outros: "Outros",
+<<<<<<< HEAD
   reparo: "",
   desativacao: ""
+=======
+>>>>>>> 800509275a39df1cba6f9ba95f92e8ec5b86120e
 };
 
 const STATUS_LABEL: Record<OSStatus, string> = {
