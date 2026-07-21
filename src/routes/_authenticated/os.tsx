@@ -22,7 +22,7 @@ export const Route = createFileRoute("/_authenticated/os")({
 });
 
 type OSTipo = "instalacao" | "reparo" | "manutencao" | "mudanca_endereco" | "desativacao" | "visita_tecnica" | "outros"
-type OSStatus = "agendada" | "aberta" | "em_atendimento" | "em_execucao" | "em_deslocamento" | "aguardando_material" | "concluida" | "cancelada"
+type OSStatus = "agendada" | "aberta" | "em_execucao" | "em_deslocamento" | "aguardando_material" | "concluida" | "cancelada"
 
 type Material = {
   id?: string;
@@ -69,7 +69,6 @@ const STATUS_LABEL: Record<OSStatus, string> = {
   aguardando_material: "Aguardando_material",
   concluida: "Concluída",
   cancelada: "Cancelada",
-  em_atendimento: ""
 };
 
 const STATUS_VARIANT: Record<OSStatus, "default" | "secondary" | "destructive" | "outline"> = {
@@ -80,13 +79,12 @@ const STATUS_VARIANT: Record<OSStatus, "default" | "secondary" | "destructive" |
   aguardando_material: "default",
   concluida: "secondary",
   cancelada: "destructive",
-  em_atendimento: "default"
 };
 
 const osSchema = z.object({
   cliente_id: z.string().uuid("Selecione um cliente"),
   tipo: z.enum(["instalacao", "manutencao", "mudanca_endereco", "visita_tecnica"]),
-  status: z.enum(["aberta", "agendada", "em_andamento", "concluida", "cancelada"]),
+  status: z.enum(["aberta", "agendada", "em_execucao", "em_andamento","concluida", "cancelada"]),
   descricao: z.string().trim().min(3, "Descreva o serviço").max(2000),
   tecnico_id: z.string().uuid().nullable(),
   cto_ref: z.string().max(80).nullable(),
