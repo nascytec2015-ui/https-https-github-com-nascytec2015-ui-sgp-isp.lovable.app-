@@ -1185,24 +1185,16 @@ function OSPage() {
               </option>
 
               {
-                (
-                  Object.keys(
-                    STATUS_LABEL
-                  )
-                  as OSStatus[]
-                )
-                .map((s)=>(
-
+                Object.keys(STATUS_LABEL).map((s) => (
                   <option
                     key={s}
                     value={s}
                   >
                     {STATUS_LABEL[s]}
                   </option>
-
                 ))
               }
-
+               
             </select>
 
 
