@@ -982,13 +982,9 @@ function OSPage() {
               await supabase
                 .from("ordens_servico")
                 .insert({
-
                   ...payload,
-
-
                   created_by:
                     u.user?.id ?? null
-
                 })
                 .select("id")
                 .single();
@@ -2483,7 +2479,6 @@ function OSPage() {
                   Observações internas
                 </Label>
 
-
                 <Textarea
 
                   name="observacoes_internas"
@@ -2514,7 +2509,6 @@ function OSPage() {
                   :
                   "Salvar OS"
                 }
-
 
               </Button>
             </DialogFooter>
