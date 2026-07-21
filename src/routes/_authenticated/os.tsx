@@ -55,7 +55,7 @@ const TIPO_LABEL: Record<OSTipo, string> = {
   instalacao: "Instalação",
   manutencao: "Manutenção/Reparo",
   mudanca_endereco: "Mudança de endereço",
-  visita_tecnica: "Visita técnica",
+  visita_tecnica: "Visita_técnica",
   outros: "Outros",
 };
 
