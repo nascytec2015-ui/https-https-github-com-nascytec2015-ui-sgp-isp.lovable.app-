@@ -136,10 +136,10 @@ const TIPO_LABEL: Record<OSTipo, string> = {
 const STATUS_LABEL: Record<OSStatus, string> = {
   agendada : "agendada",
   aberta : "Aberta",
-  em_atendimento : "Em atendimento",
-  em_execucao : "Em execução",
-  "em deslocamento": "Em deslocamento",
-  "aguardando material": "Aguardando material",
+  em_atendimento : "Em_atendimento",
+  em_execucao : "Em_execução",
+  "em_deslocamento": "Em_deslocamento",
+  "aguardando_material": "Aguardando_material",
   concluida : "Concluída",
   cancelada : "Cancelada",
 };
@@ -152,8 +152,8 @@ const STATUS_VARIANT: Record<
   aberta: "default",
   em_atendimento: "secondary",
   em_execucao: "default",
-  "em deslocamento": "outline",
-  "aguardando material": "secondary",
+  "em_deslocamento": "outline",
+  "aguardando_material": "secondary",
   concluida: "default",
   cancelada: "destructive",
 };
