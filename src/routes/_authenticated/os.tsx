@@ -1194,7 +1194,7 @@ function OSPage() {
                   </option>
                 ))
               }
-               
+
             </select>
 
 
@@ -2132,28 +2132,23 @@ function OSPage() {
                       e.target.files || []
                     );
 
-                  setEvidencias(old=>[
-
+                  setEvidencias((old) => [
                     ...old,
-                    ...files.map(file=>({
-                      tipo:
-                        file.type.startsWith("video")
-                        ?
-                        "video"
-                        :
-                        "foto",
-                      arquivo:
-                        file,
-                      descricao:""
-
-                    }))
-
+                    {
+                      tipo: "foto" as const,
+                      arquivo: file,
+                      descricao: ""
+                    }
                   ]);
 
-
-                }}
-
-              />
+                  setEvidencias((old) => [
+                    ...old,
+                    {
+                      tipo: "video" as const,
+                      arquivo: file,
+                      descricao: ""
+                    }
+                  ]);
 
               {
                 evidencias.map((ev,index)=>(
