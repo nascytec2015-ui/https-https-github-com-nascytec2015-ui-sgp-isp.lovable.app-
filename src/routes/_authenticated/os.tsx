@@ -82,7 +82,7 @@ const STATUS_VARIANT: Record<OSStatus, "default" | "secondary" | "destructive" |
 const osSchema = z.object({
   cliente_id: z.string().uuid("Selecione um cliente"),
   tipo: z.enum(["instalacao", "manutencao", "mudanca_endereco", "visita_tecnica"]),
-  status: z.enum(["aberta", "agendada", "em_execucao", "em_andamento","concluida", "cancelada"]),
+  status: z.enum(["agendada", "aberta", "em_execucao", "em_deslocamento", "aguardando_material", "concluida", "cancelada"]),
   descricao: z.string().trim().min(3, "Descreva o serviço").max(2000),
   tecnico_id: z.string().uuid().nullable(),
   cto_ref: z.string().max(80).nullable(),
