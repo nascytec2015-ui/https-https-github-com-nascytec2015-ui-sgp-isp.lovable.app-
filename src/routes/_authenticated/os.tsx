@@ -399,21 +399,21 @@ function OSPage() {
         .from("os-evidencias")
         .getPublicUrl(nomeArquivo);
 
+    const {
+      data: authData,
+    } = await supabase.auth.getUser();
+
     const { error: dbError } =
       await supabase
         .from("os_evidencias")
         .insert({
-
           os_id: osId,
-
           tipo: evidencia.tipo,
-
-          arquivo:
-            urlData.publicUrl,
-
-          descricao:
-            evidencia.descricao || ""
-
+          url: urlData.publicUrl,
+          descricao: evidencia.descricao || "",
+          mime_type: arquivo.type,
+          tamanho_bytes: arquivo.size,
+          criado_por: authData.user!.id,
         });
 
     if (dbError)
