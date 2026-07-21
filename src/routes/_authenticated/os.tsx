@@ -54,11 +54,8 @@ type OS = {
 const TIPO_LABEL: Record<OSTipo, string> = {
   instalacao: "Instalação",
   manutencao: "Manutenção/Reparo",
-  mudanca_endereco: "Mudança_endereço",
-  visita_tecnica: "Visita_técnica",
-  outros: "Outros",
-  reparo: "",
-  desativacao: ""
+  mudanca_endereco: "Mudança de endereço",
+  visita_tecnica: "Visita técnica",
 };
 
 const STATUS_LABEL: Record<OSStatus, string> = {
