@@ -13,6 +13,7 @@ import {
 import { z } from "zod";
 
 import { supabase } from "@/integrations/supabase/client";
+import type { Database } from "@/integrations/supabase/database.types";
 import { useAuth } from "@/lib/auth-context";
 
 import { Button } from "@/components/ui/button";
@@ -40,8 +41,6 @@ import {
 
 import { Badge } from "@/components/ui/badge";
 
-
-
 export const Route = createFileRoute("/_authenticated/os")({
   head: () => ({
     meta: [
@@ -54,20 +53,9 @@ export const Route = createFileRoute("/_authenticated/os")({
   component: OSPage,
 });
 
-type OSTipo =
-  | "instalacao"
-  | "manutencao"
-  | "mudanca_endereco"
-  | "visita_tecnica";
+type OSTipo = Database["public"]["Enums"]["os_tipo"];
 
-type OSStatus =
-  | "aberta"
-  | "em_atendimento"
-  | "em_execucao"
-  | "em deslocamento"
-  | "aguardando material"
-  | "concluida"
-  | "cancelada";
+type OSStatus = Database["public"]["Enums"]["os_status"];
 
 type Material = {
   id?: string;
