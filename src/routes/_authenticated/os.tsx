@@ -21,8 +21,8 @@ export const Route = createFileRoute("/_authenticated/os")({
   component: OSPage,
 });
 
-type OSTipo = "instalacao" | "manutencao" | "mudanca_endereco" | "visita_tecnica";
-type OSStatus = "aberta" | "agendada" | "em_andamento" | "concluida" | "cancelada";
+type OSTipo = "instalacao" | "reparo" | "manutencao" | "mudanca_endereco" | "desativacao" | "visita_tecnica" | "outros"
+type OSStatus = "agendada" | "aberta" | "em_execucao" | "em_deslocamento" | "aguardando_material" | "concluida" | "cancelada"
 
 type Material = {
   id?: string;
@@ -54,22 +54,27 @@ type OS = {
 const TIPO_LABEL: Record<OSTipo, string> = {
   instalacao: "Instalação",
   manutencao: "Manutenção/Reparo",
-  mudanca_endereco: "Mudança de endereço",
-  visita_tecnica: "Visita técnica",
+  mudanca_endereco: "Mudança_endereço",
+  visita_tecnica: "Visita_técnica",
+  outros: "Outros",
 };
 
 const STATUS_LABEL: Record<OSStatus, string> = {
-  aberta: "Aberta",
   agendada: "Agendada",
-  em_andamento: "Em andamento",
+  aberta: "Aberta",
+  em_execucao: "Em_execução",
+  em_deslocamento: "Em_deslocamento",
+  aguardando_material: "Aguardando_material",
   concluida: "Concluída",
   cancelada: "Cancelada",
 };
 
 const STATUS_VARIANT: Record<OSStatus, "default" | "secondary" | "destructive" | "outline"> = {
-  aberta: "outline",
-  agendada: "secondary",
-  em_andamento: "default",
+  agendada: "outline",
+  aberta: "secondary",
+  em_execucao: "default",
+  em_deslocamento: "default",
+  aguardando_material: "default",
   concluida: "secondary",
   cancelada: "destructive",
 };
