@@ -1879,7 +1879,6 @@ function OSPage() {
 
               />
 
-
               {
                 enderecoPreenchido && (
 
@@ -1898,10 +1897,6 @@ function OSPage() {
 
             </div>
 
-
-
-
-
             <div
               className="
                 grid
@@ -1909,8 +1904,6 @@ function OSPage() {
                 gap-3
               "
             >
-
-
               <Input
 
                 name="cto_ref"
@@ -1923,8 +1916,6 @@ function OSPage() {
                 }
 
               />
-
-
 
               <Input
 
@@ -1944,10 +1935,6 @@ function OSPage() {
 
             </div>
 
-
-
-
-
             <div
               className="
                 grid
@@ -1955,7 +1942,6 @@ function OSPage() {
                 gap-3
               "
             >
-
 
               <Input
 
@@ -1971,8 +1957,6 @@ function OSPage() {
 
               />
 
-
-
               <Input
 
                 name="data_inicio"
@@ -1986,8 +1970,6 @@ function OSPage() {
                 }
 
               />
-
-
 
               <Input
 
@@ -2068,10 +2050,6 @@ function OSPage() {
 
               </div>
 
-
-
-
-
               {
                 materiais.map((m,i)=>(
 
@@ -2122,10 +2100,6 @@ function OSPage() {
                       }}
 
                     />
-
-
-
-
 
                     <Input
 
