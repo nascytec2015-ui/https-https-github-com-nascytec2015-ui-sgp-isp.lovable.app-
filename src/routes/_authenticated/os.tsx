@@ -56,6 +56,7 @@ const TIPO_LABEL: Record<OSTipo, string> = {
   manutencao: "Manutenção/Reparo",
   mudanca_endereco: "Mudança de endereço",
   visita_tecnica: "Visita técnica",
+  outros: "Outros",
 };
 
 const STATUS_LABEL: Record<OSStatus, string> = {
