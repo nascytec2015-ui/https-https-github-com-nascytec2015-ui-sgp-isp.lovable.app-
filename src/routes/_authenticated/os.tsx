@@ -861,21 +861,18 @@ function OSPage() {
             } =
               await supabase.auth.getUser();
 
-            const {
-              data,
-              error
-            } =
-              await supabase
-                .from("ordens_servico")
-                .insert()
-                .select("id")
-                .single();
+            const { data, error } = await supabase
+              .from("ordens_servico")
+              .insert(novaOS)
+              .select("id")
+              .single();
 
-            if (error)
-              throw error;
+            if (error) {
+              console.error(error);
+              return;
+            }
 
-            osId =
-              data.id;
+            console.log("OS criada:", data.id);
 
           }
 
@@ -1159,14 +1156,14 @@ function OSPage() {
               </option>
 
               {
-                Object.keys(STATUS_LABEL).map((s) => (
-                  <option
-                    key={s}
-                    value={s}
-                  >
-                    {STATUS_LABEL[s]}
-                  </option>
-                ))
+               (Object.keys(STATUS_LABEL) as OSStatus[]).map((status) => (
+  <option
+    key={status}
+    value={status}
+  >
+    {STATUS_LABEL[status]}
+  </option>
+))
               }
 
             </select>
