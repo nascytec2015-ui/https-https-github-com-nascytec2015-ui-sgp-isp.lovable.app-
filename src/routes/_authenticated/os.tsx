@@ -134,6 +134,7 @@ const TIPO_LABEL: Record<OSTipo, string> = {
 };
 
 const STATUS_LABEL: Record<OSStatus, string> = {
+  agendada : "agendada",
   aberta : "Aberta",
   em_atendimento : "Em atendimento",
   em_execucao : "Em execução",
@@ -145,33 +146,16 @@ const STATUS_LABEL: Record<OSStatus, string> = {
 
 const STATUS_VARIANT: Record<
   OSStatus,
-  "default" |
-  "secondary" |
-  "destructive" |
-  "outline"
+  "default" | "secondary" | "destructive" | "outline"
 > = {
-
-  aberta :
-    "outline",
-
-  agendada :
-    "secondary",
-
-  em_execucao :
-    "default",
-
-  em_deslocamento :
-    "default",
-
-  aguardando_material :
-    "default",
-
-  concluida:
-    "secondary",
-
-  cancelada:
-    "destructive",
-
+  agendada: "outline",
+  aberta: "default",
+  em_atendimento: "secondary",
+  em_execucao: "default",
+  "em deslocamento": "outline",
+  "aguardando material": "secondary",
+  concluida: "default",
+  cancelada: "destructive",
 };
 
 const osSchema = z.object({
@@ -192,8 +176,8 @@ const osSchema = z.object({
 
   status:
     z.enum([
+      "agendada"
       "aberta",
-      "agendada",
       "em_execucao",
       "em_deslocamento",
       "aguardando_material",
@@ -882,11 +866,7 @@ function OSPage() {
             } =
               await supabase
                 .from("ordens_servico")
-                .insert({
-                  ...payload,
-                  created_by:
-                    u.user?.id ?? null
-                })
+                .insert()
                 .select("id")
                 .single();
 
