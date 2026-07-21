@@ -54,26 +54,20 @@ export const Route = createFileRoute("/_authenticated/os")({
   component: OSPage,
 });
 
-
-
 type OSTipo =
   | "instalacao"
   | "manutencao"
   | "mudanca_endereco"
   | "visita_tecnica";
 
-
-
 type OSStatus =
   | "aberta"
-  | "agendada"
+  | "em_atendimento"
   | "em_execucao"
-  | "em_deslocamento"
-  | "aguardando_material"
+  | "em deslocamento"
+  | "aguardando material"
   | "concluida"
   | "cancelada";
-
-
 
 type Material = {
   id?: string;
@@ -81,8 +75,6 @@ type Material = {
   quantidade: number;
   unidade: string;
 };
-
-
 
 type Evidencia = {
   id?: string;
@@ -102,78 +94,43 @@ type Evidencia = {
   string;
 };
 
-
-
 type OS = {
 
   id:
   string;
-
   numero:
   number;
-
   cliente_id:
   string;
-
-
   tipo:
   OSTipo;
-
-
   status:
   OSStatus;
-
-
   descricao:
   string;
-
-
   tecnico_id:
   string | null;
-
-
   cto_ref:
   string | null;
-
-
   porta_cto:
   number | null;
-
-
   endereco_atendimento:
   string | null;
-
-
-  data_agendada:
+ data_agendada:
   string | null;
-
-
-  data_inicio:
+ data_inicio:
   string | null;
-
-
   data_conclusao:
   string | null;
-
-
   assinatura_cliente:
   string | null;
-
-
   observacoes_cliente:
   string | null;
-
-
   observacoes_internas:
   string | null;
-
-
-
   clientes?: {
-
     nome:
     string;
-
   } | null;
 
 };
@@ -194,36 +151,15 @@ const TIPO_LABEL: Record<OSTipo, string> = {
 
 };
 
-
-
-
 const STATUS_LABEL: Record<OSStatus, string> = {
-
-  aberta:
-    "Aberta",
-
-  agendada:
-    "Agendada",
-
-  em_execucao:
-    "Em execução",
-
-  em_deslocamento:
-    "Em deslocamento",
-
-  aguardando_material:
-    "Aguardando material",
-
-  concluida:
-    "Concluída",
-
-  cancelada:
-    "Cancelada",
-
+  aberta : "Aberta",
+  em_atendimento : "Em atendimento",
+  em_execucao : "Em execução",
+  "em deslocamento": "Em deslocamento",
+  "aguardando material": "Aguardando material",
+  concluida : "Concluída",
+  cancelada : "Cancelada",
 };
-
-
-
 
 const STATUS_VARIANT: Record<
   OSStatus,
@@ -233,20 +169,19 @@ const STATUS_VARIANT: Record<
   "outline"
 > = {
 
-
-  aberta:
+  aberta :
     "outline",
 
-  agendada:
+  agendada :
     "secondary",
 
-  em_execucao:
+  em_execucao :
     "default",
 
-  em_deslocamento:
+  em_deslocamento :
     "default",
 
-  aguardando_material:
+  aguardando_material :
     "default",
 
   concluida:
@@ -256,9 +191,6 @@ const STATUS_VARIANT: Record<
     "destructive",
 
 };
-
-
-
 
 const osSchema = z.object({
 
