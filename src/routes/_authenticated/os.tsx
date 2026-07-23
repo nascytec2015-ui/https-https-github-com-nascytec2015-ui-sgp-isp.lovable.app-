@@ -15,6 +15,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useEffect } from "react";
 
 export const Route = createFileRoute("/_authenticated/os")({
   head: () => ({ meta: [{ title: "Ordens de Serviço — ISP Manager" }] }),
@@ -29,6 +30,7 @@ type Material = {
   descricao: string;
   quantidade: number;
   unidade: string;
+  valor_unitario?: number;
 };
 
 type OS = {
@@ -117,6 +119,8 @@ function OSPage() {
   const [statusFilter, setStatusFilter] = useState<OSStatus | "todos">("todos");
   const [clienteId, setClienteId] = useState<string>("");
   const [endereco, setEndereco] = useState<string>("");
+  const [ctoRef, setCtoRef] = useState<string>("");
+  const [portaCto, setPortaCto] = useState<string>("");
   const [uploading, setUploading] = useState(false);
 
   const { data: ordens = [], isLoading } = useQuery({
@@ -194,25 +198,77 @@ function OSPage() {
   }
 
   function openNew() {
+
     setEditing(null);
     setMateriais([]);
+
     setClienteId("");
     setEndereco("");
+
+    setCtoRef("");
+    setPortaCto("");
+
     setOpen(true);
   }
 
   function openEdit(o: OS) {
+
     setEditing(o);
+
     setMateriais([]);
+
     setClienteId(o.cliente_id);
-    setEndereco(o.endereco_atendimento ?? fullAddress(clientes.find((c) => c.id === o.cliente_id)));
+
+    setEndereco(
+      o.endereco_atendimento ??
+      fullAddress(
+        clientes.find(
+          c => c.id === o.cliente_id
+        )
+      )
+    );
+
+
+    setCtoRef(
+      o.cto_ref ?? ""
+    );
+
+
+    setPortaCto(
+      o.porta_cto
+        ? String(o.porta_cto)
+        : ""
+    );
+
+
     setOpen(true);
   }
 
   function onClienteChange(id: string) {
+
     setClienteId(id);
-    const c = clientes.find((x) => x.id === id);
-    setEndereco(fullAddress(c));
+
+    const c = clientes.find(
+      (x) => x.id === id
+    );
+
+
+    setEndereco(
+      fullAddress(c)
+    );
+
+
+    setCtoRef(
+      c?.cto_ref ?? ""
+    );
+
+
+    setPortaCto(
+      c?.porta_cto
+        ? String(c.porta_cto)
+        : ""
+    );
+
   }
 
   // Evidências
@@ -273,11 +329,11 @@ function OSPage() {
   }
 
   // Sync loaded materials when editing
-  useMemo(() => {
-    if (editing?.id && materiaisEdit.length > 0 && materiais.length === 0) {
+  useEffect(() => {
+    if (editing?.id) {
       setMateriais(materiaisEdit);
     }
-  }, [editing?.id, materiaisEdit, materiais.length]);
+  }, [editing?.id, materiaisEdit]);
 
   const save = useMutation({
     mutationFn: async (form: FormData) => {
@@ -297,6 +353,16 @@ function OSPage() {
         observacoes_cliente: (form.get("observacoes_cliente") as string) || null,
         observacoes_internas: (form.get("observacoes_internas") as string) || null,
       });
+
+      // Validação para instalações
+      if (
+        parsed.tipo === "instalacao" &&
+        (!parsed.cto_ref || parsed.porta_cto === null)
+      ) {
+        throw new Error(
+          "Informe a CTO e a Porta antes de salvar uma instalação."
+        );
+      }
 
       const payload = {
         ...parsed,
@@ -535,11 +601,27 @@ function OSPage() {
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-2">
                 <Label htmlFor="cto_ref">CTO/Caixa</Label>
-                <Input id="cto_ref" name="cto_ref" defaultValue={editing?.cto_ref ?? ""} placeholder="Ex: CTO-001" />
+                <Input
+                  id="cto_ref"
+                  name="cto_ref"
+                  value={ctoRef}
+                  onChange={(e) =>
+                    setCtoRef(e.target.value)
+                  }
+                  placeholder="CTO-001"
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="porta_cto">Porta</Label>
-                <Input id="porta_cto" name="porta_cto" type="number" min="0" defaultValue={editing?.porta_cto ?? ""} />
+                <Input
+                  id="porta_cto"
+                  name="porta_cto"
+                  type="number"
+                  value={portaCto}
+                  onChange={(e) =>
+                    setPortaCto(e.target.value)
+                  }
+                />
               </div>
             </div>
 
