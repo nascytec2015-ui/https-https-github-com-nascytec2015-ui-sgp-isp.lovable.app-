@@ -136,13 +136,23 @@ function OSPage() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("clientes")
-        .select("id, nome, endereco, numero, bairro, cidade, estado, cep")
+        .select("id, nome, endereco, numero, bairro, cidade, estado, cep, cto_ref, porta_cto")
         .order("nome");
       if (error) throw error;
-      return data as {
-        id: string; nome: string;
-        endereco: string | null; numero: string | null; bairro: string | null;
-        cidade: string | null; estado: string | null; cep: string | null;
+      return data as unknown as {
+        id: string;
+        nome: string;
+
+        endereco: string | null;
+        numero: string | null;
+        bairro: string | null;
+        cidade: string | null;
+        estado: string | null;
+        cep: string | null;
+
+        cto_ref: string | null;
+        porta_cto: number | null;
+
       }[];
     },
   });
