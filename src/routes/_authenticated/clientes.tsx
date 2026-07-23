@@ -68,20 +68,27 @@ type Cliente = {
   cpf_cnpj: string | null;
   email: string | null;
   telefone: string | null;
+
   endereco: string | null;
   numero: string | null;
   bairro: string | null;
   cidade: string | null;
   estado: string | null;
   cep: string | null;
+
   plano_id: string | null;
   ppoe_user: string | null;
   ppoe_pass: string | null;
   ip_fixo: string | null;
-  observacoes: string | null;
-  status: Status;
+
+  cto_ref: string | null;
+  porta_cto: number | null;
+  
   data_ativacao: string | null;
   data_cancelamento: string | null;
+
+  observacoes: string | null;
+  status: Status;
 };
 type Plano = { id: string; nome: string };
 
@@ -100,6 +107,11 @@ const clienteSchema = z.object({
   ppoe_user: z.string().trim().max(80).optional().or(z.literal("")),
   ppoe_pass: z.string().trim().max(80).optional().or(z.literal("")),
   ip_fixo: z.string().trim().max(45).optional().or(z.literal("")),
+  cto_ref: z.string().trim().max(80).optional().or(z.literal("")),
+  porta_cto: z
+    .string()
+    .optional()
+    .or(z.literal("")),
   observacoes: z.string().trim().max(1000).optional().or(z.literal("")),
 });
 
@@ -147,7 +159,7 @@ function ClientesPage() {
         .select("*")
         .order("created_at", { ascending: false });
       if (error) throw error;
-      return data as Cliente[];
+      return data as unknown as Cliente[];
     },
   });
 
@@ -169,7 +181,21 @@ function ClientesPage() {
       const parsed = clienteSchema.parse(raw);
       const payload: Record<string, unknown> = {};
       Object.entries(parsed).forEach(([k, v]) => {
-        payload[k] = v === "" || v === undefined ? null : v;
+
+        if (k === "porta_cto") {
+          payload[k] =
+            v === "" || v === undefined
+              ? null
+              : Number(v);
+
+          return;
+        }
+
+        payload[k] =
+          v === "" || v === undefined
+            ? null
+            : v;
+
       });
       if (editing) {
         const { error } = await supabase
@@ -479,6 +505,39 @@ function ClientesPage() {
                 <div className="space-y-2">
                   <Label htmlFor="ip_fixo">IP fixo (opcional)</Label>
                   <Input id="ip_fixo" name="ip_fixo" defaultValue={editing?.ip_fixo ?? ""} />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="cto_ref">
+                    CTO / Caixa
+                  </Label>
+
+                  <Input
+                    id="cto_ref"
+                    name="cto_ref"
+                    placeholder="Ex: CTO-001"
+                    defaultValue={editing?.cto_ref ?? ""}
+                  />
+
+                </div>
+
+
+                <div className="space-y-2">
+                  <Label htmlFor="porta_cto">
+                    Porta CTO
+                  </Label>
+
+                  <Input
+                    id="porta_cto"
+                    name="porta_cto"
+                    type="number"
+                    min="0"
+                    max="999"
+                    placeholder="Ex: 01"
+                    defaultValue={
+                      editing?.porta_cto ?? ""
+                    }
+                  />
+
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="ppoe_user">Usuário PPPoE</Label>
