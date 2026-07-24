@@ -18,6 +18,8 @@ import { Route as AuthenticatedFtthRouteImport } from './routes/_authenticated/f
 import { Route as AuthenticatedMonitoramentoRouteImport } from './routes/_authenticated/monitoramento'
 import { Route as AuthenticatedOsRouteImport } from './routes/_authenticated/os'
 import { Route as AuthenticatedPlanosRouteImport } from './routes/_authenticated/planos'
+import { Route as AuthenticatedProjetistaFtthRouteImport } from './routes/_authenticated/projetista-ftth'
+import { Route as AuthenticatedProjetistaFtthIndexRouteImport } from './routes/_authenticated/projetista-ftth/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -64,6 +66,18 @@ const AuthenticatedPlanosRoute = AuthenticatedPlanosRouteImport.update({
   path: '/planos',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedProjetistaFtthRoute =
+  AuthenticatedProjetistaFtthRouteImport.update({
+    id: '/projetista-ftth',
+    path: '/projetista-ftth',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedProjetistaFtthIndexRoute =
+  AuthenticatedProjetistaFtthIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedProjetistaFtthRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -74,6 +88,8 @@ export interface FileRoutesByFullPath {
   '/monitoramento': typeof AuthenticatedMonitoramentoRoute
   '/os': typeof AuthenticatedOsRoute
   '/planos': typeof AuthenticatedPlanosRoute
+  '/projetista-ftth': typeof AuthenticatedProjetistaFtthRouteWithChildren
+  '/projetista-ftth/': typeof AuthenticatedProjetistaFtthIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -84,6 +100,7 @@ export interface FileRoutesByTo {
   '/monitoramento': typeof AuthenticatedMonitoramentoRoute
   '/os': typeof AuthenticatedOsRoute
   '/planos': typeof AuthenticatedPlanosRoute
+  '/projetista-ftth': typeof AuthenticatedProjetistaFtthIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -96,6 +113,8 @@ export interface FileRoutesById {
   '/_authenticated/monitoramento': typeof AuthenticatedMonitoramentoRoute
   '/_authenticated/os': typeof AuthenticatedOsRoute
   '/_authenticated/planos': typeof AuthenticatedPlanosRoute
+  '/_authenticated/projetista-ftth': typeof AuthenticatedProjetistaFtthRouteWithChildren
+  '/_authenticated/projetista-ftth/': typeof AuthenticatedProjetistaFtthIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -108,6 +127,8 @@ export interface FileRouteTypes {
     | '/monitoramento'
     | '/os'
     | '/planos'
+    | '/projetista-ftth'
+    | '/projetista-ftth/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -118,6 +139,7 @@ export interface FileRouteTypes {
     | '/monitoramento'
     | '/os'
     | '/planos'
+    | '/projetista-ftth'
   id:
     | '__root__'
     | '/'
@@ -129,6 +151,8 @@ export interface FileRouteTypes {
     | '/_authenticated/monitoramento'
     | '/_authenticated/os'
     | '/_authenticated/planos'
+    | '/_authenticated/projetista-ftth'
+    | '/_authenticated/projetista-ftth/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -202,8 +226,37 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPlanosRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/projetista-ftth': {
+      id: '/_authenticated/projetista-ftth'
+      path: '/projetista-ftth'
+      fullPath: '/projetista-ftth'
+      preLoaderRoute: typeof AuthenticatedProjetistaFtthRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/projetista-ftth/': {
+      id: '/_authenticated/projetista-ftth/'
+      path: '/'
+      fullPath: '/projetista-ftth/'
+      preLoaderRoute: typeof AuthenticatedProjetistaFtthIndexRouteImport
+      parentRoute: typeof AuthenticatedProjetistaFtthRoute
+    }
   }
 }
+
+interface AuthenticatedProjetistaFtthRouteChildren {
+  AuthenticatedProjetistaFtthIndexRoute: typeof AuthenticatedProjetistaFtthIndexRoute
+}
+
+const AuthenticatedProjetistaFtthRouteChildren: AuthenticatedProjetistaFtthRouteChildren =
+  {
+    AuthenticatedProjetistaFtthIndexRoute:
+      AuthenticatedProjetistaFtthIndexRoute,
+  }
+
+const AuthenticatedProjetistaFtthRouteWithChildren =
+  AuthenticatedProjetistaFtthRoute._addFileChildren(
+    AuthenticatedProjetistaFtthRouteChildren,
+  )
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedClientesRoute: typeof AuthenticatedClientesRoute
@@ -212,6 +265,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedMonitoramentoRoute: typeof AuthenticatedMonitoramentoRoute
   AuthenticatedOsRoute: typeof AuthenticatedOsRoute
   AuthenticatedPlanosRoute: typeof AuthenticatedPlanosRoute
+  AuthenticatedProjetistaFtthRoute: typeof AuthenticatedProjetistaFtthRouteWithChildren
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -221,6 +275,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedMonitoramentoRoute: AuthenticatedMonitoramentoRoute,
   AuthenticatedOsRoute: AuthenticatedOsRoute,
   AuthenticatedPlanosRoute: AuthenticatedPlanosRoute,
+  AuthenticatedProjetistaFtthRoute:
+    AuthenticatedProjetistaFtthRouteWithChildren,
 }
 
 const AuthenticatedRouteRouteWithChildren =
